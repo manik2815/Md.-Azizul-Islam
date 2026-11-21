@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Dollar Rate</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --text:#111111; --hint:#8a8a8a; --sec:#f2f2f7;
+    --border:#e3e3e8; --btn:#2481cc; --btn-text:#ffffff; --accent:#2481cc;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans Bengali","Noto Sans Devanagari","Noto Sans Myanmar",sans-serif;background:var(--bg);color:var(--text);padding:16px 16px 32px}
+  h1{font-size:22px;margin:4px 0 12px}
+  h2{font-size:16px;margin:20px 0 8px}
+  .lang-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .lang-row button{border:1px solid var(--border);background:var(--sec);color:var(--text);border-radius:16px;padding:5px 10px;font-size:13px;cursor:pointer}
+  .lang-row button.on{background:var(--btn);border-color:var(--btn);color:var(--btn-text)}
+  .card{background:var(--sec);border:1px solid var(--border);border-radius:14px;padding:14px}
+  label{display:block;font-size:13px;color:var(--hint);margin-bottom:4px}
+  input[type=number]{width:100%;font-size:22px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);margin-bottom:12px}
+  .row{display:flex;gap:8px;align-items:flex-end}
+  .col{flex:1;min-width:0}
+  select{width:100%;font-size:16px;padding:10px 8px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text)}
+  #swap{flex:0 0 44px;height:44px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-size:20px;cursor:pointer;margin-bottom:2px}
+  .chips{display:flex;gap:8px;margin:12px 0 4px}
+  .chips button{flex:1;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:9px;padding:7px 0;font-size:14px;cursor:pointer}
+  .result{font-size:22px;font-weight:700;margin-top:12px;word-break:break-word}
+  .unit{font-size:14px;color:var(--hint);margin-top:4px}
+  .list-row{display:flex;justify-content:space-between;gap:10px;padding:11px 4px;border-bottom:1px solid var(--border);cursor:pointer}
+  .list-row .nm{font-size:15px}
+  .list-row .vl{font-size:15px;font-weight:600;white-space:nowrap}
+  .hint{font-size:13px;color:var(--hint);margin-top:10px}
+  .updated{font-size:13px;color:var(--hint);text-align:center;margin-top:16px}
+  #refresh{display:block;width:100%;margin-top:10px;padding:11px;border:none;border-radius:11px;background:var(--btn);color:var(--btn-text);font-size:15px;cursor:pointer}
+  .err{color:#c0392b;font-size:14px;margin-top:10px}
+  .src{font-size:12px;color:var(--hint);text-align:center;margin-top:14px}
+</style>
+</head>
+<body>
+  <h1 id="title">💵 ডলার রেট</h1>
+  <div class="lang-row" id="langRow"></div>
+
+  <div class="card">
+    <label id="lblAmount" for="amount">পরিমাণ</label>
+    <input id="amount" type="number" inputmode="decimal" min="0" step="any" value="1">
+    <div class="row">
+      <div class="col">
+        <label id="lblFrom" for="fromSel">থেকে</label>
+        <select id="fromSel"></select>
+      </div>
+      <button id="swap" title="swap">⇅</button>
+      <div class="col">
+        <label id="lblTo" for="toSel">এতে</label>
+        <select id="toSel"></select>
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="result" id="result">…</div>
+    <div class="unit" id="unit"></div>
+    <div class="err" id="err" style="display:none"></div>
+  </div>
+
+  <h2 id="popularTitle"></h2>
+  <div id="list"></div>
+  <div class="hint" id="tapHint"></div>
+
+  <div class="updated" id="updated"></div>
+  <button id="refresh"></button>
+  <div class="src" id="src"></div>
+
+<script>
+const DATA = {"langs": ["bn", "en", "hi", "ur", "ne", "my", "si", "ta"], "langButtons": {"bn": "🇧🇩 বাংলা", "en": "🇬🇧 English", "hi": "🇮🇳 हिन्दी", "ur": "🇵🇰 اردو", "ne": "🇳🇵 नेपाली", "my": "🇲🇲 မြန်မာ", "si": "🇱🇰 සිංහල", "ta": "🇮🇳 தமிழ்"}, "codes": ["BDT", "INR", "PKR", "EUR", "GBP", "JPY", "CNY", "AED", "SAR", "AUD", "CAD", "SGD"], "names": {"BDT": {"bn": "বাংলাদেশি টাকা", "en": "Bangladeshi Taka", "hi": "बांग्लादेशी टका", "ur": "بنگلہ دیشی ٹکا", "ne": "बंगलादेशी टका", "my": "ဘင်္ဂလားဒေ့ရှ် တာကာ", "si": "බංග්ලාදේශ ටකා", "ta": "வங்கதேச டாக்கா"}, "INR": {"bn": "ভারতীয় রুপি", "en": "Indian Rupee", "hi": "भारतीय रुपया", "ur": "بھارتی روپیہ", "ne": "भारतीय रुपियाँ", "my": "အိန္ဒိယ ရူပီး", "si": "ඉන්දීය රුපියල", "ta": "இந்திய ரூபாய்"}, "PKR": {"bn": "পাকিস্তানি রুপি", "en": "Pakistani Rupee", "hi": "पाकिस्तानी रुपया", "ur": "پاکستانی روپیہ", "ne": "पाकिस्तानी रुपियाँ", "my": "ပါကစ္စတန် ရူပီး", "si": "පාකිස්ථාන රුපියල", "ta": "பாகிஸ்தான் ரூபாய்"}, "EUR": {"bn": "ইউরো", "en": "Euro", "hi": "यूरो", "ur": "یورو", "ne": "युरो", "my": "ယူရို", "si": "යුරෝ", "ta": "யூரோ"}, "GBP": {"bn": "ব্রিটিশ পাউন্ড", "en": "British Pound", "hi": "ब्रिटिश पाउंड", "ur": "برطانوی پاؤنڈ", "ne": "ब्रिटिस पाउन्ड", "my": "ဗြိတိသျှ ပေါင်", "si": "බ්‍රිතාන්‍ය පවුම", "ta": "பிரித்தானிய பவுண்ட்"}, "JPY": {"bn": "জাপানি ইয়েন", "en": "Japanese Yen", "hi": "जापानी येन", "ur": "جاپانی ین", "ne": "जापानी येन", "my": "ဂျပန် ယန်း", "si": "ජපාන යෙන්", "ta": "ஜப்பானிய யென்"}, "CNY": {"bn": "চীনা ইউয়ান", "en": "Chinese Yuan", "hi": "चीनी युआन", "ur": "چینی یوآن", "ne": "चिनियाँ युआन", "my": "တရုတ် ယွမ်", "si": "චීන යුවාන්", "ta": "சீன யுவான்"}, "AED": {"bn": "আমিরাত দিরহাম", "en": "UAE Dirham", "hi": "यूएई दिरहम", "ur": "متحدہ عرب امارات درہم", "ne": "युएई दिराम", "my": "ယူအေအီး ဒါဟမ်", "si": "එ.අ.එ. ඩිරාම්", "ta": "ஐக்கிய அரபு எமிரேட் திர்ஹம்"}, "SAR": {"bn": "সৌদি রিয়াল", "en": "Saudi Riyal", "hi": "सऊदी रियाल", "ur": "سعودی ریال", "ne": "साउदी रियाल", "my": "ဆော်ဒီ ရီယယ်", "si": "සවුදි රියාල්", "ta": "சவுதி ரியால்"}, "AUD": {"bn": "অস্ট্রেলিয়ান ডলার", "en": "Australian Dollar", "hi": "ऑस्ट्रेलियाई डॉलर", "ur": "آسٹریلوی ڈالر", "ne": "अस्ट्रेलियाली डलर", "my": "ဩစတြေးလျ ဒေါ်လာ", "si": "ඕස්ට්‍රේලියානු ඩොලරය", "ta": "ஆஸ்திரேலிய டாலர்"}, "CAD": {"bn": "কানাডিয়ান ডলার", "en": "Canadian Dollar", "hi": "कनाडाई डॉलर", "ur": "کینیڈین ڈالر", "ne": "क्यानेडियाली डलर", "my": "ကနေဒါ ဒေါ်လာ", "si": "කැනේඩියානු ඩොලරය", "ta": "கனடிய டாலர்"}, "SGD": {"bn": "সিঙ্গাপুর ডলার", "en": "Singapore Dollar", "hi": "सिंगापुर डॉलर", "ur": "سنگاپور ڈالر", "ne": "सिंगापुर डलर", "my": "စင်ကာပူ ဒေါ်လာ", "si": "සිංගප්පූරු ඩොලරය", "ta": "சிங்கப்பூர் டாலர்"}}, "months": {"bn": ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"], "hi": ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्तूबर", "नवंबर", "दिसंबर"], "ur": ["جنوری", "فروری", "مارچ", "اپریل", "مئی", "جون", "جولائی", "اگست", "ستمبر", "اکتوبر", "نومبر", "دسمبر"], "ne": ["जनवरी", "फेब्रुअरी", "मार्च", "अप्रिल", "मे", "जुन", "जुलाई", "अगस्ट", "सेप्टेम्बर", "अक्टोबर", "नोभेम्बर", "डिसेम्बर"], "my": ["ဇန်နဝါရီ", "ဖေဖော်ဝါရီ", "မတ်", "ဧပြီ", "မေ", "ဇွန်", "ဇူလိုင်", "ဩဂုတ်", "စက်တင်ဘာ", "အောက်တိုဘာ", "နိုဝင်ဘာ", "ဒီဇင်ဘာ"], "si": ["ජනවාරි", "පෙබරවාරි", "මාර්තු", "අප්‍රේල්", "මැයි", "ජූනි", "ජූලි", "අගෝස්තු", "සැප්තැම්බර්", "ඔක්තෝබර්", "නොවැම්බර්", "දෙසැම්බර්"], "ta": ["ஜனவரி", "பிப்ரவரி", "மார்ச்", "ஏப்ரல்", "மே", "ஜூன்", "ஜூலை", "ஆகஸ்ட்", "செப்டம்பர்", "அக்டோபர்", "நவம்பர்", "டிசம்பர்"]}, "digits": {"bn": {"0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪", "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"}, "hi": {"0": "०", "1": "१", "2": "२", "3": "३", "4": "४", "5": "५", "6": "६", "7": "७", "8": "८", "9": "९"}, "ne": {"0": "०", "1": "१", "2": "२", "3": "३", "4": "४", "5": "५", "6": "६", "7": "७", "8": "८", "9": "९"}, "ur": {"0": "۰", "1": "۱", "2": "۲", "3": "۳", "4": "۴", "5": "۵", "6": "۶", "7": "۷", "8": "۸", "9": "۹"}, "my": {"0": "၀", "1": "၁", "2": "၂", "3": "၃", "4": "၄", "5": "၅", "6": "၆", "7": "၇", "8": "၈", "9": "၉"}}, "ui": {"title": {"bn": "💵 ডলার রেট", "en": "💵 Dollar Rate", "hi": "💵 डॉलर रेट", "ur": "💵 ڈالر ریٹ", "ne": "💵 डलर रेट", "my": "💵 ဒေါ်လာဈေးနှုန်း", "si": "💵 ඩොලර් අගය", "ta": "💵 டாலர் விலை"}, "amount": {"bn": "পরিমাণ", "en": "Amount", "hi": "राशि", "ur": "رقم", "ne": "रकम", "my": "ပမာဏ", "si": "ප්‍රමාණය", "ta": "தொகை"}, "from": {"bn": "থেকে", "en": "From", "hi": "से", "ur": "سے", "ne": "बाट", "my": "မှ", "si": "සිට", "ta": "இருந்து"}, "to": {"bn": "এতে", "en": "To", "hi": "को", "ur": "تک", "ne": "मा", "my": "သို့", "si": "දක්වා", "ta": "க்கு"}, "usd_name": {"bn": "মার্কিন ডলার", "en": "US Dollar", "hi": "अमेरिकी डॉलर", "ur": "امریکی ڈالر", "ne": "अमेरिकी डलर", "my": "အမေရိကန် ဒေါ်လာ", "si": "ඇමරිකානු ඩොලරය", "ta": "அமெரிக்க டாலர்"}, "updated": {"bn": "আপডেট", "en": "Updated", "hi": "अपडेट", "ur": "اپ ڈیٹ", "ne": "अपडेट", "my": "အပ်ဒိတ်", "si": "යාවත්කාලීන", "ta": "புதுப்பிக்கப்பட்டது"}, "loading": {"bn": "লোড হচ্ছে…", "en": "Loading…", "hi": "लोड हो रहा है…", "ur": "لوڈ ہو رہا ہے…", "ne": "लोड हुँदैछ…", "my": "တင်နေသည်…", "si": "පූරණය වෙමින්…", "ta": "ஏற்றுகிறது…"}, "refresh": {"bn": "↻ রেট রিফ্রেশ করো", "en": "↻ Refresh rates", "hi": "↻ रेट रीफ़्रेश करें", "ur": "↻ ریٹ ریفریش کریں", "ne": "↻ रेट रिफ्रेस गर्नुहोस्", "my": "↻ ဈေးနှုန်းပြန်တင်ပါ", "si": "↻ මිල නැවත ලබා ගන්න", "ta": "↻ விலையைப் புதுப்பிக்கவும்"}, "tap_hint": {"bn": "👆 যেকোনো কারেন্সিতে চাপ দিলে সেটা “এতে” হবে", "en": "👆 Tap a currency to set it as the target", "hi": "👆 किसी करेंसी पर टैप करें, वह “को” बन जाएगी", "ur": "👆 کسی کرنسی پر ٹیپ کریں، وہ منزل بن جائے گی", "ne": "👆 कुनै मुद्रामा ट्याप गर्नुहोस्, त्यो गन्तव्य बन्नेछ", "my": "👆 ငွေကြေးတစ်ခုခုကို နှိပ်ရင် အဲဒါက ပစ်မှတ်ဖြစ်သွားမယ်", "si": "👆 මුදලක් මත තට්ටු කරන්න, එය ඉලක්කය වේවි", "ta": "👆 ஒரு நாணயத்தைத் தட்டினால் அது இலக்காகும்"}, "source": {"bn": "সূত্র: open.er-api.com", "en": "Source: open.er-api.com", "hi": "स्रोत: open.er-api.com", "ur": "ماخذ: open.er-api.com", "ne": "स्रोत: open.er-api.com", "my": "ရင်းမြစ်: open.er-api.com", "si": "මූලාශ්‍රය: open.er-api.com", "ta": "மூலம்: open.er-api.com"}, "popular": {"bn": "💵 জনপ্রিয় কারেন্সিতে ১ ডলারের দাম:", "en": "💵 1 USD in popular currencies:", "hi": "💵 लोकप्रिय करेंसी में 1 डॉलर की कीमत:", "ur": "💵 مقبول کرنسیوں میں 1 ڈالر کی قیمت:", "ne": "💵 लोकप्रिय मुद्रामा १ डलरको मूल्य:", "my": "💵 လူကြိုက်များတဲ့ ငွေကြေးတွေမှာ ၁ ဒေါ်လာရဲ့ဈေးနှုန်း:", "si": "💵 ජනප්‍රිය මුදල්වලින් ඩොලර් 1ක මිල:", "ta": "💵 பிரபலமான நாணயங்களில் 1 டாலரின் விலை:"}, "error": {"bn": "⚠️ রেট আনতে সমস্যা হয়েছে: {e}", "en": "⚠️ Couldn't fetch the rate: {e}", "hi": "⚠️ रेट लाने में दिक्कत हुई: {e}", "ur": "⚠️ ریٹ لانے میں مسئلہ ہوا: {e}", "ne": "⚠️ रेट ल्याउन समस्या भयो: {e}", "my": "⚠️ ဈေးနှုန်းရယူရာမှာ အခက်အခဲဖြစ်သွားပါတယ်: {e}", "si": "⚠️ මිල ලබා ගැනීමේදී ගැටලුවක් ඇතිවුණා: {e}", "ta": "⚠️ விலையைப் பெறுவதில் சிக்கல்: {e}"}, "lang_menu": {"bn": "🌐 ভাষা বেছে নাও:", "en": "🌐 Choose your language:", "hi": "🌐 अपनी भाषा चुनें:", "ur": "🌐 اپنی زبان منتخب کریں:", "ne": "🌐 आफ्नो भाषा छान्नुहोस्:", "my": "🌐 ဘာသာစကားကို ရွေးချယ်ပါ:", "si": "🌐 ඔබේ භාෂාව තෝරන්න:", "ta": "🌐 உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்:"}}};
+const LANGS = DATA.langs, CODES = DATA.codes, NAMES = DATA.names,
+      MONTHS = DATA.months, DIGITS = DATA.digits, UI = DATA.ui;
+
+const tg = (window.Telegram && Telegram.WebApp) ? Telegram.WebApp : null;
+
+let lang = "bn";
+let rates = null;          // per-1-USD rates
+let ratesAt = 0;           // ms epoch of last fetch
+let updatedUtc = "";       // API time_last_update_utc
+let fromCode = "USD", toCode = "BDT";
+
+const $ = id => document.getElementById(id);
+
+function applyTheme(){
+  if(!tg) return;
+  const p = tg.themeParams || {};
+  const root = document.documentElement.style;
+  if(p.bg_color) root.setProperty("--bg", p.bg_color);
+  if(p.text_color) root.setProperty("--text", p.text_color);
+  if(p.hint_color) root.setProperty("--hint", p.hint_color);
+  if(p.secondary_bg_color) root.setProperty("--sec", p.secondary_bg_color);
+  if(p.button_color) root.setProperty("--btn", p.button_color);
+  if(p.button_text_color) root.setProperty("--btn-text", p.button_text_color);
+  if(p.accent_text_color) root.setProperty("--accent", p.accent_text_color);
+}
+
+function locDigits(s){
+  const m = DIGITS[lang];
+  if(!m) return String(s);
+  return String(s).replace(/[0-9]/g, d => m[d] || d);
+}
+function fmt(n){
+  let s;
+  if(n >= 100) s = n.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2});
+  else if(n >= 1) s = n.toLocaleString("en-US", {minimumFractionDigits:0, maximumFractionDigits:4});
+  else s = n.toLocaleString("en-US", {minimumFractionDigits:0, maximumFractionDigits:6});
+  return locDigits(s);
+}
+function t(key){ const v = UI[key]; return (v && v[lang]) || (v && v.bn) || key; }
+function curName(code){
+  if(code === "USD") return t("usd_name");
+  const n = NAMES[code]; return (n && n[lang]) || (n && n.bn) || code;
+}
+
+function formatDhaka(utcStr){
+  if(!utcStr) return "";
+  const d = new Date(utcStr);
+  if(isNaN(d)) return "";
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone:"Asia/Dhaka", day:"numeric", month:"numeric", year:"numeric",
+    hour:"numeric", minute:"2-digit", hour12:true
+  }).formatToParts(d);
+  const get = type => (parts.find(p => p.type === type) || {}).value || "";
+  const months = MONTHS[lang] || MONTHS.bn;
+  const day = locDigits(get("day")), year = locDigits(get("year"));
+  const monthName = months[parseInt(get("month"), 10) - 1] || get("month");
+  const hm = locDigits(get("hour") + ":" + get("minute") + " " + get("dayPeriod"));
+  return day + " " + monthName + " " + year + ", " + hm;
+}
+
+function convert(amount, from, to){
+  if(from === to) return amount;
+  const rFrom = from === "USD" ? 1 : rates[from];
+  const rTo = to === "USD" ? 1 : rates[to];
+  if(!rFrom || !rTo) return null;
+  return amount / rFrom * rTo;
+}
+
+function render(){
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === "ur") ? "rtl" : "ltr";
+  $("title").textContent = t("title");
+  document.title = t("title").replace(/[^A-Za-z ]/g, "").trim() || "Dollar Rate";
+  $("lblAmount").textContent = t("amount");
+  $("lblFrom").textContent = t("from");
+  $("lblTo").textContent = t("to");
+  $("popularTitle").textContent = t("popular");
+  $("tapHint").textContent = t("tap_hint");
+  $("refresh").textContent = t("refresh");
+  $("src").textContent = t("source");
+
+  // language buttons
+  const row = $("langRow"); row.innerHTML = "";
+  LANGS.forEach(code => {
+    const b = document.createElement("button");
+    b.textContent = DATA.langButtons[code] || code;
+    if(code === lang) b.className = "on";
+    b.onclick = () => { lang = code; buildSelects(); render(); };
+    row.appendChild(b);
+  });
+
+  // chips
+  const chips = $("chips"); chips.innerHTML = "";
+  [1, 10, 100, 1000].forEach(v => {
+    const b = document.createElement("button");
+    b.textContent = locDigits(v);
+    b.onclick = () => { $("amount").value = v; renderResult(); };
+    chips.appendChild(b);
+  });
+
+  renderResult();
+  renderList();
+}
+
+function buildSelects(){
+  const all = ["USD"].concat(CODES);
+  [["fromSel", fromCode], ["toSel", toCode]].forEach(([id, cur]) => {
+    const sel = $(id); sel.innerHTML = "";
+    all.forEach(code => {
+      const o = document.createElement("option");
+      o.value = code;
+      o.textContent = code + " — " + curName(code);
+      if(code === cur) o.selected = true;
+      sel.appendChild(o);
+    });
+  });
+}
+
+function renderResult(){
+  const amt = parseFloat($("amount").value);
+  const err = $("err");
+  if(!rates){
+    $("result").textContent = t("loading");
+    $("unit").textContent = "";
+    return;
+  }
+  if(isNaN(amt) || amt < 0){
+    $("result").textContent = "";
+    $("unit").textContent = "";
+    return;
+  }
+  const value = convert(amt, fromCode, toCode);
+  const unit = convert(1, fromCode, toCode);
+  if(value === null || unit === null){
+    err.style.display = "block";
+    err.textContent = t("error").replace("{e}", "rate missing");
+    return;
+  }
+  err.style.display = "none";
+  $("result").textContent =
+    fmt(amt) + " " + fromCode + " = " + fmt(value) + " " + toCode;
+  $("unit").textContent =
+    "1 " + fromCode + " = " + fmt(unit) + " " + toCode +
+    "  •  " + curName(toCode);
+}
+
+function renderList(){
+  const list = $("list"); list.innerHTML = "";
+  if(!rates) return;
+  CODES.forEach(code => {
+    const row = document.createElement("div");
+    row.className = "list-row";
+    const nm = document.createElement("span");
+    nm.className = "nm";
+    nm.textContent = curName(code) + " (" + code + ")";
+    const vl = document.createElement("span");
+    vl.className = "vl";
+    vl.textContent = fmt(rates[code]);
+    row.appendChild(nm); row.appendChild(vl);
+    row.onclick = () => {
+      toCode = code; buildSelects(); renderResult();
+      window.scrollTo({top:0, behavior:"smooth"});
+    };
+    list.appendChild(row);
+  });
+  $("updated").textContent = updatedUtc
+    ? t("updated") + ": " + formatDhaka(updatedUtc) : "";
+}
+
+async function fetchRates(force){
+  const now = Date.now();
+  if(rates && !force && now - ratesAt < 30 * 60 * 1000) return;
+  const urls = [
+    "https://open.er-api.com/v6/latest/USD",
+    "https://api.exchangerate-api.com/v4/latest/USD"
+  ];
+  let lastErr = "";
+  for(const url of urls){
+    try{
+      const resp = await fetch(url, {headers: {"Accept": "application/json"}});
+      const data = await resp.json();
+      if(!data.rates || !data.rates.BDT) throw new Error("bad payload");
+      rates = data.rates;
+      ratesAt = Date.now();
+      updatedUtc = data.time_last_update_utc || data.date || "";
+      $("err").style.display = "none";
+      renderResult(); renderList();
+      return;
+    }catch(e){ lastErr = String(e && e.message || e); }
+  }
+  const err = $("err");
+  err.style.display = "block";
+  err.textContent = t("error").replace("{e}", lastErr);
+}
+
+function init(){
+  // language: Telegram user's language first, else Bangla
+  let lc = "";
+  if(tg && tg.initDataUnsafe && tg.initDataUnsafe.user){
+    lc = (tg.initDataUnsafe.user.language_code || "").slice(0, 2).toLowerCase();
+  }
+  if(LANGS.includes(lc)) lang = lc;
+
+  applyTheme();
+  if(tg){
+    tg.ready();
+    tg.expand();
+    tg.onEvent("themeChanged", applyTheme);
+  }
+  buildSelects();
+  $("amount").addEventListener("input", renderResult);
+  $("fromSel").addEventListener("change", e => { fromCode = e.target.value; renderResult(); });
+  $("toSel").addEventListener("change", e => { toCode = e.target.value; renderResult(); });
+  $("swap").addEventListener("click", () => {
+    const tmp = fromCode; fromCode = toCode; toCode = tmp;
+    buildSelects(); renderResult();
+  });
+  $("refresh").addEventListener("click", () => fetchRates(true));
+  render();
+  fetchRates(false);
+}
+
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
