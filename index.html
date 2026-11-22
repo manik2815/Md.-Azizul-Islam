@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Dollar Rate</title>
-<script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+<script src="https://telegram.org/js/telegram-web-app.js" async></script>
 <style>
   :root{
     --bg:#eef0f3; --text:#111111; --hint:#8a8a8a; --sec:#ffffff;
@@ -143,7 +143,7 @@ const DATA = {"langs": ["bn", "en", "hi", "ur", "ne", "my", "si", "ta"], "langBu
 const LANGS = DATA.langs, CODES = DATA.codes, NAMES = DATA.names,
       MONTHS = DATA.months, DIGITS = DATA.digits, UI = DATA.ui;
 
-const tg = (window.Telegram && Telegram.WebApp) ? Telegram.WebApp : null;
+let tg = (window.Telegram && Telegram.WebApp) ? Telegram.WebApp : null;
 
 let lang = "bn";
 let rates = null;          // per-1-USD rates
@@ -411,6 +411,23 @@ function showView(v){
   window.scrollTo(0, 0);
 }
 
+function waitForTelegram(tries){
+  // telegram-web-app.js loads async: it may arrive after init(). Poll for
+  // it briefly so theme + user name still apply; the page works without it.
+  if(window.Telegram && window.Telegram.WebApp){
+    tg = window.Telegram.WebApp;
+    applyTheme();
+    tg.ready();
+    tg.expand();
+    tg.onEvent("themeChanged", applyTheme);
+    if(tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name){
+      $("userName").textContent = tg.initDataUnsafe.user.first_name;
+    }
+    return;
+  }
+  if(tries > 0) setTimeout(() => waitForTelegram(tries - 1), 250);
+}
+
 function init(){
   // language: Telegram user's language first, else Bangla
   let lc = "";
@@ -424,6 +441,8 @@ function init(){
     tg.ready();
     tg.expand();
     tg.onEvent("themeChanged", applyTheme);
+  } else {
+    waitForTelegram(20);
   }
   buildSelects();
   $("amount").addEventListener("input", renderResult);
