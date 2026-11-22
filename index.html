@@ -362,13 +362,14 @@ async function fetchRates(force){
       ratesAt = Date.now();
       updatedUtc = data.time_last_update_utc || data.date || "";
       $("err").style.display = "none";
-      renderResult(); renderList();
+      renderResult(); renderList(); updateHero();
       return;
     }catch(e){ lastErr = String(e && e.message || e); }
   }
   const err = $("err");
   err.style.display = "block";
   err.textContent = t("error").replace("{e}", lastErr);
+  $("heroValue").textContent = t("error").replace("{e}", lastErr);
 }
 
 function buildTrSelect(){
