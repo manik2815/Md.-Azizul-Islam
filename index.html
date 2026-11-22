@@ -22,6 +22,7 @@
   .card{background:var(--sec);border:1px solid var(--border);border-radius:14px;padding:14px}
   label{display:block;font-size:13px;color:var(--hint);margin-bottom:4px}
   input[type=number]{width:100%;font-size:22px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);margin-bottom:12px}
+  textarea{width:100%;min-height:90px;font-size:16px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);margin-bottom:12px;font-family:inherit;resize:vertical}
   .row{display:flex;gap:8px;align-items:flex-end}
   .col{flex:1;min-width:0}
   select{width:100%;font-size:16px;padding:10px 8px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text)}
@@ -35,7 +36,7 @@
   .list-row .vl{font-size:15px;font-weight:600;white-space:nowrap}
   .hint{font-size:13px;color:var(--hint);margin-top:10px}
   .updated{font-size:13px;color:var(--hint);text-align:center;margin-top:16px}
-  #refresh{display:block;width:100%;margin-top:10px;padding:11px;border:none;border-radius:11px;background:var(--btn);color:var(--btn-text);font-size:15px;cursor:pointer}
+  #refresh, #trButton{display:block;width:100%;margin-top:10px;padding:11px;border:none;border-radius:11px;background:var(--btn);color:var(--btn-text);font-size:15px;cursor:pointer}
   .err{color:#c0392b;font-size:14px;margin-top:10px}
   .src{font-size:12px;color:var(--hint);text-align:center;margin-top:14px}
 </style>
@@ -46,6 +47,7 @@
   <div id="view-home">
     <button class="menu-btn" id="btnRate"></button>
     <button class="menu-btn" id="btnLang"></button>
+    <button class="menu-btn" id="btnTr"></button>
   </div>
 
   <div id="view-rate" style="display:none">
@@ -83,10 +85,23 @@
     <div class="lang-list" id="langList"></div>
   </div>
 
+  <div id="view-tr" style="display:none">
+    <button class="back-btn" id="backTr"></button>
+    <div class="card">
+      <label id="lblTrInput" for="trInput">লেখা</label>
+      <textarea id="trInput" rows="4"></textarea>
+      <label id="lblTrTo" for="trToSel">কোন ভাষায়</label>
+      <select id="trToSel"></select>
+      <button id="trButton"></button>
+      <div class="result" id="trResult"></div>
+      <div class="unit" id="trUnit"></div>
+    </div>
+  </div>
+
   <div class="src" id="src"></div>
 
 <script>
-const DATA = {"langs": ["bn", "en", "hi", "ur", "ne", "my", "si", "ta"], "langButtons": {"bn": "🇧🇩 বাংলা", "en": "🇬🇧 English", "hi": "🇮🇳 हिन्दी", "ur": "🇵🇰 اردو", "ne": "🇳🇵 नेपाली", "my": "🇲🇲 မြန်မာ", "si": "🇱🇰 සිංහල", "ta": "🇮🇳 தமிழ்"}, "codes": ["BDT", "INR", "PKR", "EUR", "GBP", "JPY", "CNY", "AED", "SAR", "AUD", "CAD", "SGD"], "names": {"BDT": {"bn": "বাংলাদেশি টাকা", "en": "Bangladeshi Taka", "hi": "बांग्लादेशी टका", "ur": "بنگلہ دیشی ٹکا", "ne": "बंगलादेशी टका", "my": "ဘင်္ဂလားဒေ့ရှ် တာကာ", "si": "බංග්ලාදේශ ටකා", "ta": "வங்கதேச டாக்கா"}, "INR": {"bn": "ভারতীয় রুপি", "en": "Indian Rupee", "hi": "भारतीय रुपया", "ur": "بھارتی روپیہ", "ne": "भारतीय रुपियाँ", "my": "အိန္ဒိယ ရူပီး", "si": "ඉන්දීය රුපියල", "ta": "இந்திய ரூபாய்"}, "PKR": {"bn": "পাকিস্তানি রুপি", "en": "Pakistani Rupee", "hi": "पाकिस्तानी रुपया", "ur": "پاکستانی روپیہ", "ne": "पाकिस्तानी रुपियाँ", "my": "ပါကစ္စတန် ရူပီး", "si": "පාකිස්ථාන රුපියල", "ta": "பாகிஸ்தான் ரூபாய்"}, "EUR": {"bn": "ইউরো", "en": "Euro", "hi": "यूरो", "ur": "یورو", "ne": "युरो", "my": "ယူရို", "si": "යුරෝ", "ta": "யூரோ"}, "GBP": {"bn": "ব্রিটিশ পাউন্ড", "en": "British Pound", "hi": "ब्रिटिश पाउंड", "ur": "برطانوی پاؤنڈ", "ne": "ब्रिटिस पाउन्ड", "my": "ဗြိတိသျှ ပေါင်", "si": "බ්‍රිතාන්‍ය පවුම", "ta": "பிரித்தானிய பவுண்ட்"}, "JPY": {"bn": "জাপানি ইয়েন", "en": "Japanese Yen", "hi": "जापानी येन", "ur": "جاپانی ین", "ne": "जापानी येन", "my": "ဂျပန် ယန်း", "si": "ජපාන යෙන්", "ta": "ஜப்பானிய யென்"}, "CNY": {"bn": "চীনা ইউয়ান", "en": "Chinese Yuan", "hi": "चीनी युआन", "ur": "چینی یوآن", "ne": "चिनियाँ युआन", "my": "တရုတ် ယွမ်", "si": "චීන යුවාන්", "ta": "சீன யுவான்"}, "AED": {"bn": "আমিরাত দিরহাম", "en": "UAE Dirham", "hi": "यूएई दिरहम", "ur": "متحدہ عرب امارات درہم", "ne": "युएई दिराम", "my": "ယူအေအီး ဒါဟမ်", "si": "එ.අ.එ. ඩිරාම්", "ta": "ஐக்கிய அரபு எமிரேட் திர்ஹம்"}, "SAR": {"bn": "সৌদি রিয়াল", "en": "Saudi Riyal", "hi": "सऊदी रियाल", "ur": "سعودی ریال", "ne": "साउदी रियाल", "my": "ဆော်ဒီ ရီယယ်", "si": "සවුදි රියාල්", "ta": "சவுதி ரியால்"}, "AUD": {"bn": "অস্ট্রেলিয়ান ডলার", "en": "Australian Dollar", "hi": "ऑस्ट्रेलियाई डॉलर", "ur": "آسٹریلوی ڈالر", "ne": "अस्ट्रेलियाली डलर", "my": "ဩစတြေးလျ ဒေါ်လာ", "si": "ඕස්ට්‍රේලියානු ඩොලරය", "ta": "ஆஸ்திரேலிய டாலர்"}, "CAD": {"bn": "কানাডিয়ান ডলার", "en": "Canadian Dollar", "hi": "कनाडाई डॉलर", "ur": "کینیڈین ڈالر", "ne": "क्यानेडियाली डलर", "my": "ကနေဒါ ဒေါ်လာ", "si": "කැනේඩියානු ඩොලරය", "ta": "கனடிய டாலர்"}, "SGD": {"bn": "সিঙ্গাপুর ডলার", "en": "Singapore Dollar", "hi": "सिंगापुर डॉलर", "ur": "سنگاپور ڈالر", "ne": "सिंगापुर डलर", "my": "စင်ကာပူ ဒေါ်လာ", "si": "සිංගප්පූරු ඩොලරය", "ta": "சிங்கப்பூர் டாலர்"}}, "months": {"bn": ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"], "hi": ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्तूबर", "नवंबर", "दिसंबर"], "ur": ["جنوری", "فروری", "مارچ", "اپریل", "مئی", "جون", "جولائی", "اگست", "ستمبر", "اکتوبر", "نومبر", "دسمبر"], "ne": ["जनवरी", "फेब्रुअरी", "मार्च", "अप्रिल", "मे", "जुन", "जुलाई", "अगस्ट", "सेप्टेम्बर", "अक्टोबर", "नोभेम्बर", "डिसेम्बर"], "my": ["ဇန်နဝါရီ", "ဖေဖော်ဝါရီ", "မတ်", "ဧပြီ", "မေ", "ဇွန်", "ဇူလိုင်", "ဩဂုတ်", "စက်တင်ဘာ", "အောက်တိုဘာ", "နိုဝင်ဘာ", "ဒီဇင်ဘာ"], "si": ["ජනවාරි", "පෙබරවාරි", "මාර්තු", "අප්‍රේල්", "මැයි", "ජූනි", "ජූලි", "අගෝස්තු", "සැප්තැම්බර්", "ඔක්තෝබර්", "නොවැම්බර්", "දෙසැම්බර්"], "ta": ["ஜனவரி", "பிப்ரவரி", "மார்ச்", "ஏப்ரல்", "மே", "ஜூன்", "ஜூலை", "ஆகஸ்ட்", "செப்டம்பர்", "அக்டோபர்", "நவம்பர்", "டிசம்பர்"]}, "digits": {"bn": {"0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪", "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"}, "hi": {"0": "०", "1": "१", "2": "२", "3": "३", "4": "४", "5": "५", "6": "६", "7": "७", "8": "८", "9": "९"}, "ne": {"0": "०", "1": "१", "2": "२", "3": "३", "4": "४", "5": "५", "6": "६", "7": "७", "8": "८", "9": "९"}, "ur": {"0": "۰", "1": "۱", "2": "۲", "3": "۳", "4": "۴", "5": "۵", "6": "۶", "7": "۷", "8": "۸", "9": "۹"}, "my": {"0": "၀", "1": "၁", "2": "၂", "3": "၃", "4": "၄", "5": "၅", "6": "၆", "7": "၇", "8": "၈", "9": "၉"}}, "ui": {"title": {"bn": "💵 ডলার রেট", "en": "💵 Dollar Rate", "hi": "💵 डॉलर रेट", "ur": "💵 ڈالر ریٹ", "ne": "💵 डलर रेट", "my": "💵 ဒေါ်လာဈေးနှုန်း", "si": "💵 ඩොලර් අගය", "ta": "💵 டாலர் விலை"}, "amount": {"bn": "পরিমাণ", "en": "Amount", "hi": "राशि", "ur": "رقم", "ne": "रकम", "my": "ပမာဏ", "si": "ප්‍රමාණය", "ta": "தொகை"}, "from": {"bn": "থেকে", "en": "From", "hi": "से", "ur": "سے", "ne": "बाट", "my": "မှ", "si": "සිට", "ta": "இருந்து"}, "to": {"bn": "এতে", "en": "To", "hi": "को", "ur": "تک", "ne": "मा", "my": "သို့", "si": "දක්වා", "ta": "க்கு"}, "usd_name": {"bn": "মার্কিন ডলার", "en": "US Dollar", "hi": "अमेरिकी डॉलर", "ur": "امریکی ڈالر", "ne": "अमेरिकी डलर", "my": "အမေရိကန် ဒေါ်လာ", "si": "ඇමරිකානු ඩොලරය", "ta": "அமெரிக்க டாலர்"}, "updated": {"bn": "আপডেট", "en": "Updated", "hi": "अपडेट", "ur": "اپ ڈیٹ", "ne": "अपडेट", "my": "အပ်ဒိတ်", "si": "යාවත්කාලීන", "ta": "புதுப்பிக்கப்பட்டது"}, "loading": {"bn": "লোড হচ্ছে…", "en": "Loading…", "hi": "लोड हो रहा है…", "ur": "لوڈ ہو رہا ہے…", "ne": "लोड हुँदैछ…", "my": "တင်နေသည်…", "si": "පූරණය වෙමින්…", "ta": "ஏற்றுகிறது…"}, "refresh": {"bn": "↻ রেট রিফ্রেশ করো", "en": "↻ Refresh rates", "hi": "↻ रेट रीफ़्रेश करें", "ur": "↻ ریٹ ریفریش کریں", "ne": "↻ रेट रिफ्रेस गर्नुहोस्", "my": "↻ ဈေးနှုန်းပြန်တင်ပါ", "si": "↻ මිල නැවත ලබා ගන්න", "ta": "↻ விலையைப் புதுப்பிக்கவும்"}, "tap_hint": {"bn": "👆 যেকোনো কারেন্সিতে চাপ দিলে সেটা “এতে” হবে", "en": "👆 Tap a currency to set it as the target", "hi": "👆 किसी करेंसी पर टैप करें, वह “को” बन जाएगी", "ur": "👆 کسی کرنسی پر ٹیپ کریں، وہ منزل بن جائے گی", "ne": "👆 कुनै मुद्रामा ट्याप गर्नुहोस्, त्यो गन्तव्य बन्नेछ", "my": "👆 ငွေကြေးတစ်ခုခုကို နှိပ်ရင် အဲဒါက ပစ်မှတ်ဖြစ်သွားမယ်", "si": "👆 මුදලක් මත තට්ටු කරන්න, එය ඉලක්කය වේවි", "ta": "👆 ஒரு நாணயத்தைத் தட்டினால் அது இலக்காகும்"}, "menu_rate": {"bn": "💵 ডলার রেট", "en": "💵 Dollar Rate", "hi": "💵 डॉलर रेट", "ur": "💵 ڈالر ریٹ", "ne": "💵 डलर रेट", "my": "💵 ဒေါ်လာဈေးနှုန်း", "si": "💵 ඩොලර් අගය", "ta": "💵 டாலர் விலை"}, "menu_lang": {"bn": "🌐 ভাষা", "en": "🌐 Language", "hi": "🌐 भाषा", "ur": "🌐 زبان", "ne": "🌐 भाषा", "my": "🌐 ဘာသာစကား", "si": "🌐 භාෂාව", "ta": "🌐 மொழி"}, "back": {"bn": "← ফিরে যাও", "en": "← Back", "hi": "← वापस", "ur": "← واپس", "ne": "← फर्कनुहोस्", "my": "← ပြန်သွားမယ်", "si": "← ආපසු", "ta": "← திரும்பு"}, "source": {"bn": "সূত্র: open.er-api.com", "en": "Source: open.er-api.com", "hi": "स्रोत: open.er-api.com", "ur": "ماخذ: open.er-api.com", "ne": "स्रोत: open.er-api.com", "my": "ရင်းမြစ်: open.er-api.com", "si": "මූලාශ්‍රය: open.er-api.com", "ta": "மூலம்: open.er-api.com"}, "popular": {"bn": "💵 জনপ্রিয় কারেন্সিতে ১ ডলারের দাম:", "en": "💵 1 USD in popular currencies:", "hi": "💵 लोकप्रिय करेंसी में 1 डॉलर की कीमत:", "ur": "💵 مقبول کرنسیوں میں 1 ڈالر کی قیمت:", "ne": "💵 लोकप्रिय मुद्रामा १ डलरको मूल्य:", "my": "💵 လူကြိုက်များတဲ့ ငွေကြေးတွေမှာ ၁ ဒေါ်လာရဲ့ဈေးနှုန်း:", "si": "💵 ජනප්‍රිය මුදල්වලින් ඩොලර් 1ක මිල:", "ta": "💵 பிரபலமான நாணயங்களில் 1 டாலரின் விலை:"}, "error": {"bn": "⚠️ রেট আনতে সমস্যা হয়েছে: {e}", "en": "⚠️ Couldn't fetch the rate: {e}", "hi": "⚠️ रेट लाने में दिक्कत हुई: {e}", "ur": "⚠️ ریٹ لانے میں مسئلہ ہوا: {e}", "ne": "⚠️ रेट ल्याउन समस्या भयो: {e}", "my": "⚠️ ဈေးနှုန်းရယူရာမှာ အခက်အခဲဖြစ်သွားပါတယ်: {e}", "si": "⚠️ මිල ලබා ගැනීමේදී ගැටලුවක් ඇතිවුණා: {e}", "ta": "⚠️ விலையைப் பெறுவதில் சிக்கல்: {e}"}, "lang_menu": {"bn": "🌐 ভাষা বেছে নাও:", "en": "🌐 Choose your language:", "hi": "🌐 अपनी भाषा चुनें:", "ur": "🌐 اپنی زبان منتخب کریں:", "ne": "🌐 आफ्नो भाषा छान्नुहोस्:", "my": "🌐 ဘာသာစကားကို ရွေးချယ်ပါ:", "si": "🌐 ඔබේ භාෂාව තෝරන්න:", "ta": "🌐 உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்:"}}};
+const DATA = {"langs": ["bn", "en", "hi", "ur", "ne", "my", "si", "ta"], "langButtons": {"bn": "🇧🇩 বাংলা", "en": "🇬🇧 English", "hi": "🇮🇳 हिन्दी", "ur": "🇵🇰 اردو", "ne": "🇳🇵 नेपाली", "my": "🇲🇲 မြန်မာ", "si": "🇱🇰 සිංහල", "ta": "🇮🇳 தமிழ்"}, "codes": ["BDT", "INR", "PKR", "EUR", "GBP", "JPY", "CNY", "AED", "SAR", "AUD", "CAD", "SGD"], "names": {"BDT": {"bn": "বাংলাদেশি টাকা", "en": "Bangladeshi Taka", "hi": "बांग्लादेशी टका", "ur": "بنگلہ دیشی ٹکا", "ne": "बंगलादेशी टका", "my": "ဘင်္ဂလားဒေ့ရှ် တာကာ", "si": "බංග්ලාදේශ ටකා", "ta": "வங்கதேச டாக்கா"}, "INR": {"bn": "ভারতীয় রুপি", "en": "Indian Rupee", "hi": "भारतीय रुपया", "ur": "بھارتی روپیہ", "ne": "भारतीय रुपियाँ", "my": "အိန္ဒိယ ရူပီး", "si": "ඉන්දීය රුපියල", "ta": "இந்திய ரூபாய்"}, "PKR": {"bn": "পাকিস্তানি রুপি", "en": "Pakistani Rupee", "hi": "पाकिस्तानी रुपया", "ur": "پاکستانی روپیہ", "ne": "पाकिस्तानी रुपियाँ", "my": "ပါကစ္စတန် ရူပီး", "si": "පාකිස්ථාන රුපියල", "ta": "பாகிஸ்தான் ரூபாய்"}, "EUR": {"bn": "ইউরো", "en": "Euro", "hi": "यूरो", "ur": "یورو", "ne": "युरो", "my": "ယူရို", "si": "යුරෝ", "ta": "யூரோ"}, "GBP": {"bn": "ব্রিটিশ পাউন্ড", "en": "British Pound", "hi": "ब्रिटिश पाउंड", "ur": "برطانوی پاؤنڈ", "ne": "ब्रिटिस पाउन्ड", "my": "ဗြိတိသျှ ပေါင်", "si": "බ්‍රිතාන්‍ය පවුම", "ta": "பிரித்தானிய பவுண்ட்"}, "JPY": {"bn": "জাপানি ইয়েন", "en": "Japanese Yen", "hi": "जापानी येन", "ur": "جاپانی ین", "ne": "जापानी येन", "my": "ဂျပန် ယန်း", "si": "ජපාන යෙන්", "ta": "ஜப்பானிய யென்"}, "CNY": {"bn": "চীনা ইউয়ান", "en": "Chinese Yuan", "hi": "चीनी युआन", "ur": "چینی یوآن", "ne": "चिनियाँ युआन", "my": "တရုတ် ယွမ်", "si": "චීන යුවාන්", "ta": "சீன யுவான்"}, "AED": {"bn": "আমিরাত দিরহাম", "en": "UAE Dirham", "hi": "यूएई दिरहम", "ur": "متحدہ عرب امارات درہم", "ne": "युएई दिराम", "my": "ယူအေအီး ဒါဟမ်", "si": "එ.අ.එ. ඩිරාම්", "ta": "ஐக்கிய அரபு எமிரேட் திர்ஹம்"}, "SAR": {"bn": "সৌদি রিয়াল", "en": "Saudi Riyal", "hi": "सऊदी रियाल", "ur": "سعودی ریال", "ne": "साउदी रियाल", "my": "ဆော်ဒီ ရီယယ်", "si": "සවුදි රියාල්", "ta": "சவுதி ரியால்"}, "AUD": {"bn": "অস্ট্রেলিয়ান ডলার", "en": "Australian Dollar", "hi": "ऑस्ट्रेलियाई डॉलर", "ur": "آسٹریلوی ڈالر", "ne": "अस्ट्रेलियाली डलर", "my": "ဩစတြေးလျ ဒေါ်လာ", "si": "ඕස්ට්‍රේලියානු ඩොලරය", "ta": "ஆஸ்திரேலிய டாலர்"}, "CAD": {"bn": "কানাডিয়ান ডলার", "en": "Canadian Dollar", "hi": "कनाडाई डॉलर", "ur": "کینیڈین ڈالر", "ne": "क्यानेडियाली डलर", "my": "ကနေဒါ ဒေါ်လာ", "si": "කැනේඩියානු ඩොලරය", "ta": "கனடிய டாலர்"}, "SGD": {"bn": "সিঙ্গাপুর ডলার", "en": "Singapore Dollar", "hi": "सिंगापुर डॉलर", "ur": "سنگاپور ڈالر", "ne": "सिंगापुर डलर", "my": "စင်ကာပူ ဒေါ်လာ", "si": "සිංගප්පූරු ඩොලරය", "ta": "சிங்கப்பூர் டாலர்"}}, "months": {"bn": ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"], "hi": ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्तूबर", "नवंबर", "दिसंबर"], "ur": ["جنوری", "فروری", "مارچ", "اپریل", "مئی", "جون", "جولائی", "اگست", "ستمبر", "اکتوبر", "نومبر", "دسمبر"], "ne": ["जनवरी", "फेब्रुअरी", "मार्च", "अप्रिल", "मे", "जुन", "जुलाई", "अगस्ट", "सेप्टेम्बर", "अक्टोबर", "नोभेम्बर", "डिसेम्बर"], "my": ["ဇန်နဝါရီ", "ဖေဖော်ဝါရီ", "မတ်", "ဧပြီ", "မေ", "ဇွန်", "ဇူလိုင်", "ဩဂုတ်", "စက်တင်ဘာ", "အောက်တိုဘာ", "နိုဝင်ဘာ", "ဒီဇင်ဘာ"], "si": ["ජනවාරි", "පෙබරවාරි", "මාර්තු", "අප්‍රේල්", "මැයි", "ජූනි", "ජූලි", "අගෝස්තු", "සැප්තැම්බර්", "ඔක්තෝබර්", "නොවැම්බර්", "දෙසැම්බර්"], "ta": ["ஜனவரி", "பிப்ரவரி", "மார்ச்", "ஏப்ரல்", "மே", "ஜூன்", "ஜூலை", "ஆகஸ்ட்", "செப்டம்பர்", "அக்டோபர்", "நவம்பர்", "டிசம்பர்"]}, "digits": {"bn": {"0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪", "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"}, "hi": {"0": "०", "1": "१", "2": "२", "3": "३", "4": "४", "5": "५", "6": "६", "7": "७", "8": "८", "9": "९"}, "ne": {"0": "०", "1": "१", "2": "२", "3": "३", "4": "४", "5": "५", "6": "६", "7": "७", "8": "८", "9": "९"}, "ur": {"0": "۰", "1": "۱", "2": "۲", "3": "۳", "4": "۴", "5": "۵", "6": "۶", "7": "۷", "8": "۸", "9": "۹"}, "my": {"0": "၀", "1": "၁", "2": "၂", "3": "၃", "4": "၄", "5": "၅", "6": "၆", "7": "၇", "8": "၈", "9": "၉"}}, "ui": {"title": {"bn": "💵 ডলার রেট", "en": "💵 Dollar Rate", "hi": "💵 डॉलर रेट", "ur": "💵 ڈالر ریٹ", "ne": "💵 डलर रेट", "my": "💵 ဒေါ်လာဈေးနှုန်း", "si": "💵 ඩොලර් අගය", "ta": "💵 டாலர் விலை"}, "amount": {"bn": "পরিমাণ", "en": "Amount", "hi": "राशि", "ur": "رقم", "ne": "रकम", "my": "ပမာဏ", "si": "ප්‍රමාණය", "ta": "தொகை"}, "from": {"bn": "থেকে", "en": "From", "hi": "से", "ur": "سے", "ne": "बाट", "my": "မှ", "si": "සිට", "ta": "இருந்து"}, "to": {"bn": "এতে", "en": "To", "hi": "को", "ur": "تک", "ne": "मा", "my": "သို့", "si": "දක්වා", "ta": "க்கு"}, "usd_name": {"bn": "মার্কিন ডলার", "en": "US Dollar", "hi": "अमेरिकी डॉलर", "ur": "امریکی ڈالر", "ne": "अमेरिकी डलर", "my": "အမေရိကန် ဒေါ်လာ", "si": "ඇමරිකානු ඩොලරය", "ta": "அமெரிக்க டாலர்"}, "updated": {"bn": "আপডেট", "en": "Updated", "hi": "अपडेट", "ur": "اپ ڈیٹ", "ne": "अपडेट", "my": "အပ်ဒိတ်", "si": "යාවත්කාලීන", "ta": "புதுப்பிக்கப்பட்டது"}, "loading": {"bn": "লোড হচ্ছে…", "en": "Loading…", "hi": "लोड हो रहा है…", "ur": "لوڈ ہو رہا ہے…", "ne": "लोड हुँदैछ…", "my": "တင်နေသည်…", "si": "පූරණය වෙමින්…", "ta": "ஏற்றுகிறது…"}, "refresh": {"bn": "↻ রেট রিফ্রেশ করো", "en": "↻ Refresh rates", "hi": "↻ रेट रीफ़्रेश करें", "ur": "↻ ریٹ ریفریش کریں", "ne": "↻ रेट रिफ्रेस गर्नुहोस्", "my": "↻ ဈေးနှုန်းပြန်တင်ပါ", "si": "↻ මිල නැවත ලබා ගන්න", "ta": "↻ விலையைப் புதுப்பிக்கவும்"}, "tap_hint": {"bn": "👆 যেকোনো কারেন্সিতে চাপ দিলে সেটা “এতে” হবে", "en": "👆 Tap a currency to set it as the target", "hi": "👆 किसी करेंसी पर टैप करें, वह “को” बन जाएगी", "ur": "👆 کسی کرنسی پر ٹیپ کریں، وہ منزل بن جائے گی", "ne": "👆 कुनै मुद्रामा ट्याप गर्नुहोस्, त्यो गन्तव्य बन्नेछ", "my": "👆 ငွေကြေးတစ်ခုခုကို နှိပ်ရင် အဲဒါက ပစ်မှတ်ဖြစ်သွားမယ်", "si": "👆 මුදලක් මත තට්ටු කරන්න, එය ඉලක්කය වේවි", "ta": "👆 ஒரு நாணயத்தைத் தட்டினால் அது இலக்காகும்"}, "menu_rate": {"bn": "💵 ডলার রেট", "en": "💵 Dollar Rate", "hi": "💵 डॉलर रेट", "ur": "💵 ڈالر ریٹ", "ne": "💵 डलर रेट", "my": "💵 ဒေါ်လာဈေးနှုန်း", "si": "💵 ඩොලර් අගය", "ta": "💵 டாலர் விலை"}, "menu_lang": {"bn": "🌐 ভাষা", "en": "🌐 Language", "hi": "🌐 भाषा", "ur": "🌐 زبان", "ne": "🌐 भाषा", "my": "🌐 ဘာသာစကား", "si": "🌐 භාෂාව", "ta": "🌐 மொழி"}, "back": {"bn": "← ফিরে যাও", "en": "← Back", "hi": "← वापस", "ur": "← واپس", "ne": "← फर्कनुहोस्", "my": "← ပြန်သွားမယ်", "si": "← ආපසු", "ta": "← திரும்பு"}, "menu_tr": {"bn": "🔤 অনুবাদ", "en": "🔤 Translator", "hi": "🔤 अनुवादक", "ur": "🔤 مترجم", "ne": "🔤 अनुवादक", "my": "🔤 ဘာသာပြန်သူ", "si": "🔤 පරිවර්තක", "ta": "🔤 மொழிபெயர்ப்பாளர்"}, "tr_input": {"bn": "লেখা", "en": "Text", "hi": "पाठ", "ur": "متن", "ne": "पाठ", "my": "စာသား", "si": "පෙළ", "ta": "உரை"}, "tr_to": {"bn": "কোন ভাষায়", "en": "Translate to", "hi": "किस भाषा में", "ur": "کس زبان میں", "ne": "कुन भाषामा", "my": "ဘယ်ဘာသာစကားသို့", "si": "කවර භාෂාවටද", "ta": "எந்த மொழிக்கு"}, "tr_placeholder": {"bn": "অনুবাদ করার লেখা লিখো…", "en": "Type text to translate…", "hi": "अनुवाद करने के लिए लिखिए…", "ur": "ترجمہ کرنے کے لیے لکھیں…", "ne": "अनुवाद गर्ने पाठ लेख्नुहोस्…", "my": "ဘာသာပြန်မယ့် စာသားရိုက်ပါ…", "si": "පරිවර්තනය කිරීමට පෙළ ලියන්න…", "ta": "மொழிபெயர்க்க உரையைத் தட்டச்சு செய்க…"}, "tr_button": {"bn": "🔤 অনুবাদ করো", "en": "🔤 Translate", "hi": "🔤 अनुवाद करें", "ur": "🔤 ترجمہ کریں", "ne": "🔤 अनुवाद गर्नुहोस्", "my": "🔤 ဘာသာပြန်ပါ", "si": "🔤 පරිවර්තනය කරන්න", "ta": "🔤 மொழிபெயர்க்கவும்"}, "tr_error": {"bn": "⚠️ অনুবাদ করা গেল না: {e}", "en": "⚠️ Couldn't translate: {e}", "hi": "⚠️ अनुवाद नहीं हो पाया: {e}", "ur": "⚠️ ترجمہ نہیں ہو سکا: {e}", "ne": "⚠️ अनुवाद गर्न सकिएन: {e}", "my": "⚠️ ဘာသာပြန်လို့ မရခဲ့ပါ: {e}", "si": "⚠️ පරිවර්තනය කළ නොහැකි විය: {e}", "ta": "⚠️ மொழிபெயர்க்க முடியவில்லை: {e}"}, "source": {"bn": "সূত্র: open.er-api.com", "en": "Source: open.er-api.com", "hi": "स्रोत: open.er-api.com", "ur": "ماخذ: open.er-api.com", "ne": "स्रोत: open.er-api.com", "my": "ရင်းမြစ်: open.er-api.com", "si": "මූලාශ්‍රය: open.er-api.com", "ta": "மூலம்: open.er-api.com"}, "popular": {"bn": "💵 জনপ্রিয় কারেন্সিতে ১ ডলারের দাম:", "en": "💵 1 USD in popular currencies:", "hi": "💵 लोकप्रिय करेंसी में 1 डॉलर की कीमत:", "ur": "💵 مقبول کرنسیوں میں 1 ڈالر کی قیمت:", "ne": "💵 लोकप्रिय मुद्रामा १ डलरको मूल्य:", "my": "💵 လူကြိုက်များတဲ့ ငွေကြေးတွေမှာ ၁ ဒေါ်လာရဲ့ဈေးနှုန်း:", "si": "💵 ජනප්‍රිය මුදල්වලින් ඩොලර් 1ක මිල:", "ta": "💵 பிரபலமான நாணயங்களில் 1 டாலரின் விலை:"}, "error": {"bn": "⚠️ রেট আনতে সমস্যা হয়েছে: {e}", "en": "⚠️ Couldn't fetch the rate: {e}", "hi": "⚠️ रेट लाने में दिक्कत हुई: {e}", "ur": "⚠️ ریٹ لانے میں مسئلہ ہوا: {e}", "ne": "⚠️ रेट ल्याउन समस्या भयो: {e}", "my": "⚠️ ဈေးနှုန်းရယူရာမှာ အခက်အခဲဖြစ်သွားပါတယ်: {e}", "si": "⚠️ මිල ලබා ගැනීමේදී ගැටලුවක් ඇතිවුණා: {e}", "ta": "⚠️ விலையைப் பெறுவதில் சிக்கல்: {e}"}, "lang_menu": {"bn": "🌐 ভাষা বেছে নাও:", "en": "🌐 Choose your language:", "hi": "🌐 अपनी भाषा चुनें:", "ur": "🌐 اپنی زبان منتخب کریں:", "ne": "🌐 आफ्नो भाषा छान्नुहोस्:", "my": "🌐 ဘာသာစကားကို ရွေးချယ်ပါ:", "si": "🌐 ඔබේ භාෂාව තෝරන්න:", "ta": "🌐 உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்:"}}};
 const LANGS = DATA.langs, CODES = DATA.codes, NAMES = DATA.names,
       MONTHS = DATA.months, DIGITS = DATA.digits, UI = DATA.ui;
 
@@ -97,6 +112,7 @@ let rates = null;          // per-1-USD rates
 let ratesAt = 0;           // ms epoch of last fetch
 let updatedUtc = "";       // API time_last_update_utc
 let fromCode = "USD", toCode = "BDT";
+let trTo = "en";
 
 const $ = id => document.getElementById(id);
 
@@ -171,8 +187,15 @@ function render(){
   // menu buttons + language list
   $("btnRate").textContent = t("menu_rate");
   $("btnLang").textContent = t("menu_lang");
+  $("btnTr").textContent = t("menu_tr");
   $("backRate").textContent = t("back");
   $("backLang").textContent = t("back");
+  $("backTr").textContent = t("back");
+  $("lblTrInput").textContent = t("tr_input");
+  $("lblTrTo").textContent = t("tr_to");
+  $("trInput").placeholder = t("tr_placeholder");
+  $("trButton").textContent = t("tr_button");
+  buildTrSelect();
   const list = $("langList"); list.innerHTML = "";
   LANGS.forEach(code => {
     const b = document.createElement("button");
@@ -286,8 +309,37 @@ async function fetchRates(force){
   err.textContent = t("error").replace("{e}", lastErr);
 }
 
+function buildTrSelect(){
+  const sel = $("trToSel"); sel.innerHTML = "";
+  LANGS.forEach(code => {
+    const o = document.createElement("option");
+    o.value = code;
+    o.textContent = DATA.langButtons[code] || code;
+    if(code === trTo) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+
+async function doTranslate(){
+  const text = $("trInput").value.trim();
+  if(!text){ $("trResult").textContent = ""; $("trUnit").textContent = ""; return; }
+  $("trResult").textContent = t("loading");
+  $("trUnit").textContent = "";
+  try{
+    const url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" + trTo + "&dt=t&q=" + encodeURIComponent(text);
+    const resp = await fetch(url);
+    const data = await resp.json();
+    const out = data[0].map(s => (s && s[0]) || "").join("");
+    const src = data[2] || "";
+    $("trResult").textContent = out;
+    $("trUnit").textContent = (src ? src.toUpperCase() : "?") + " → " + trTo.toUpperCase();
+  }catch(e){
+    $("trResult").textContent = t("tr_error").replace("{e}", (e && e.message) || e);
+  }
+}
+
 function showView(v){
-  ["home", "rate", "lang"].forEach(name => {
+  ["home", "rate", "lang", "tr"].forEach(name => {
     $("view-" + name).style.display = (name === v) ? "block" : "none";
   });
   window.scrollTo(0, 0);
@@ -318,8 +370,13 @@ function init(){
   $("refresh").addEventListener("click", () => fetchRates(true));
   $("btnRate").addEventListener("click", () => showView("rate"));
   $("btnLang").addEventListener("click", () => showView("lang"));
+  $("btnTr").addEventListener("click", () => showView("tr"));
   $("backRate").addEventListener("click", () => showView("home"));
   $("backLang").addEventListener("click", () => showView("home"));
+  $("backTr").addEventListener("click", () => showView("home"));
+  $("trButton").addEventListener("click", doTranslate);
+  $("trToSel").addEventListener("change", e => { trTo = e.target.value; });
+  trTo = (lang === "en") ? "bn" : "en";
   render();
   showView("home");
   fetchRates(false);
