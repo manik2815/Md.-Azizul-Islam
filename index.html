@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Dollar Rate</title>
+<title>A to Z</title>
 <script src="https://telegram.org/js/telegram-web-app.js" async></script>
 <style>
   :root{
@@ -20,9 +20,6 @@
   .pname{font-size:19px;font-weight:800}
   .pstatus{font-size:13px;color:var(--hint);margin-top:2px}
   .pstatus .dot{color:#22c55e}
-  .hero{text-align:center;margin:6px 0 22px}
-  .hero-label{font-size:14px;color:var(--hint)}
-  .hero-value{font-size:44px;font-weight:800;margin-top:2px;word-break:break-word}
   .actions{display:flex;justify-content:space-around;margin-bottom:20px}
   .act{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0}
   .act .circ{width:64px;height:64px;border-radius:50%;background:var(--sec);display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
@@ -59,6 +56,52 @@
   .nav-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;color:var(--hint);padding:4px 10px}
   .nav-btn .ic{font-size:22px}
   .nav-btn.on{color:var(--brand);font-weight:700}
+  .menu-row{display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid var(--border);cursor:pointer}
+  .menu-row:last-child{border-bottom:none}
+  .menu-ic{flex:0 0 44px;width:44px;height:44px;border-radius:12px;background:rgba(11,122,75,.08);display:flex;align-items:center;justify-content:center;font-size:24px}
+  .menu-tx{flex:1;min-width:0}
+  .menu-ti{font-size:16px;font-weight:700}
+  .menu-sub{font-size:13px;color:var(--hint);margin-top:2px}
+  .chev{color:var(--hint);font-size:18px}
+  input[type=text]{width:100%;font-size:16px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);margin-bottom:12px}
+  .month-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .month-nav button{border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:9px;width:36px;height:36px;font-size:18px;cursor:pointer}
+  .month-nav span{font-size:16px;font-weight:700}
+  .led-totals{display:flex;gap:8px;margin-bottom:14px}
+  .led-box{flex:1;background:var(--bg);border-radius:10px;padding:8px;text-align:center}
+  .led-lbl{font-size:12px;color:var(--hint)}
+  .led-val{font-size:16px;font-weight:800;margin-top:2px;word-break:break-word}
+  .led-val.in{color:#0b7a4b}.led-val.out{color:#c0392b}
+  .led-row{display:flex;justify-content:space-between;gap:10px;padding:11px 2px;border-bottom:1px solid var(--border);align-items:center}
+  .led-row:last-child{border-bottom:none}
+  .led-t{font-size:15px}.led-d{font-size:12px;color:var(--hint)}
+  .led-a{font-size:15px;font-weight:700;white-space:nowrap}
+  .led-a.in{color:#0b7a4b}.led-a.out{color:#c0392b}
+  .led-del{border:none;background:none;color:#c0392b;font-size:13px;cursor:pointer;padding:4px}
+  .calc-display{background:var(--bg);border-radius:10px;padding:12px;text-align:right;min-height:64px;margin-bottom:10px;word-break:break-all}
+  #calcExpr{font-size:18px;color:var(--hint);min-height:22px}
+  #calcRes{font-size:26px;font-weight:800}
+  .calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+  .calc-btn{border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:10px;padding:13px 0;font-size:18px;cursor:pointer}
+  .calc-btn.op{background:rgba(11,122,75,.12);font-weight:700}
+  .calc-btn.eq{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border:none;font-weight:800}
+  .calc-btn:active{opacity:.8}
+  #calcSciBtn{width:100%;padding:9px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-size:14px;cursor:pointer}
+  .tabs{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto}
+  .tab{flex:1;border:1px solid var(--border);background:var(--sec);color:var(--text);border-radius:20px;padding:8px 4px;font-size:14px;cursor:pointer;white-space:nowrap}
+  .tab.on{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-color:var(--brand)}
+  .news-item{display:block;padding:12px 2px;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text)}
+  .news-item:last-child{border-bottom:none}
+  .news-ti{font-size:15px;font-weight:600;line-height:1.35}
+  .news-meta{font-size:12px;color:var(--hint);margin-top:4px}
+  .tour-row{display:flex;justify-content:space-between;align-items:center;padding:13px 2px;border-bottom:1px solid var(--border);cursor:pointer}
+  .tour-row:last-child{border-bottom:none}
+  .tour-nm{font-size:16px;font-weight:700}
+  .tour-sub{font-size:13px;color:var(--hint);margin-top:2px}
+  .tour-place{padding:11px 2px;border-bottom:1px solid var(--border)}
+  .tour-place:last-child{border-bottom:none}
+  .tour-pn{font-size:15px;font-weight:700}
+  .tour-pd{font-size:13px;color:var(--hint);margin-top:3px;line-height:1.4}
 </style>
 </head>
 <body>
@@ -71,15 +114,8 @@
   </div>
 
   <div id="view-home">
-    <div class="hero">
-      <div class="hero-label" id="heroLabel">1 USD =</div>
-      <div class="hero-value" id="heroValue">…</div>
-    </div>
-    <div class="actions">
-      <button class="act" id="actRate"><span class="circ">💵</span><span class="lbl" id="lblActRate"></span></button>
-      <button class="act" id="actLang"><span class="circ">🌐</span><span class="lbl" id="lblActLang"></span></button>
-      <button class="act" id="actTr"><span class="circ">🔤</span><span class="lbl" id="lblActTr"></span></button>
-    </div>
+    <div class="sec-head"><span id="menuHead"></span></div>
+    <div class="card" id="menuList"></div>
     <div class="sec-head"><span id="popularTitle"></span><span id="popularCount"></span></div>
     <div class="card"><div id="list"></div></div>
     <div class="hint" id="tapHint"></div>
@@ -128,6 +164,49 @@
     </div>
   </div>
 
+  <div id="view-ledger" style="display:none">
+    <button class="back-btn" id="backLedger"></button>
+    <div class="card">
+      <div class="month-nav"><button id="ledPrev">‹</button><span id="ledMonth"></span><button id="ledNext">›</button></div>
+      <div class="led-totals">
+        <div class="led-box"><div class="led-lbl" id="lblLedIn"></div><div class="led-val in" id="ledIn">0</div></div>
+        <div class="led-box"><div class="led-lbl" id="lblLedOut"></div><div class="led-val out" id="ledOut">0</div></div>
+        <div class="led-box"><div class="led-lbl" id="lblLedBal"></div><div class="led-val" id="ledBal">0</div></div>
+      </div>
+      <label id="lblLedWhat" for="ledWhat"></label>
+      <input id="ledWhat" type="text" maxlength="40">
+      <label id="lblLedAmt" for="ledAmt"></label>
+      <input id="ledAmt" type="number" inputmode="decimal" min="0" step="any">
+      <div class="row"><div class="col"><select id="ledType"></select></div></div>
+      <button id="ledAdd"></button>
+      <div class="err" id="ledErr" style="display:none"></div>
+    </div>
+    <div class="sec-head"><span id="ledListHead"></span></div>
+    <div class="card"><div id="ledList"></div></div>
+  </div>
+
+  <div id="view-calc" style="display:none">
+    <button class="back-btn" id="backCalc"></button>
+    <div class="card">
+      <div class="calc-display"><div id="calcExpr"></div><div id="calcRes">=</div></div>
+      <button id="calcSciBtn"></button>
+      <div class="calc-grid" id="calcSci" style="display:none"></div>
+      <div class="calc-grid" id="calcMain"></div>
+    </div>
+  </div>
+
+  <div id="view-tour" style="display:none">
+    <button class="back-btn" id="backTour"></button>
+    <div class="card"><div id="tourList"></div></div>
+  </div>
+
+  <div id="view-news" style="display:none">
+    <button class="back-btn" id="backNews"></button>
+    <div class="tabs" id="newsTabs"></div>
+    <div class="card"><div id="newsList"></div></div>
+    <div class="hint" id="newsHint"></div>
+  </div>
+
   <nav class="bottom-nav">
     <button class="nav-btn on" id="navHome"><span class="ic">🏠</span><span id="lblNavHome">Home</span></button>
     <button class="nav-btn" id="navRate"><span class="ic">💵</span><span id="lblNavRate"></span></button>
@@ -139,9 +218,10 @@
   <div class="foot" id="foot"></div>
 
 <script>
-const DATA = {"langs": ["bn", "en", "hi", "ur", "ne", "my", "si", "ta"], "langButtons": {"bn": "🇧🇩 বাংলা", "en": "🇬🇧 English", "hi": "🇮🇳 हिन्दी", "ur": "🇵🇰 اردو", "ne": "🇳🇵 नेपाली", "my": "🇲🇲 မြန်မာ", "si": "🇱🇰 සිංහල", "ta": "🇮🇳 தமிழ்"}, "codes": ["BDT", "INR", "PKR", "EUR", "GBP", "JPY", "CNY", "AED", "SAR", "AUD", "CAD", "SGD"], "names": {"BDT": {"bn": "বাংলাদেশি টাকা", "en": "Bangladeshi Taka", "hi": "बांग्लादेशी टका", "ur": "بنگلہ دیشی ٹکا", "ne": "बंगलादेशी टका", "my": "ဘင်္ဂလားဒေ့ရှ် တာကာ", "si": "බංග්ලාදේශ ටකා", "ta": "வங்கதேச டாக்கா"}, "INR": {"bn": "ভারতীয় রুপি", "en": "Indian Rupee", "hi": "भारतीय रुपया", "ur": "بھارتی روپیہ", "ne": "भारतीय रुपियाँ", "my": "အိန္ဒိယ ရူပီး", "si": "ඉන්දීය රුපියල", "ta": "இந்திய ரூபாய்"}, "PKR": {"bn": "পাকিস্তানি রুপি", "en": "Pakistani Rupee", "hi": "पाकिस्तानी रुपया", "ur": "پاکستانی روپیہ", "ne": "पाकिस्तानी रुपियाँ", "my": "ပါကစ္စတန် ရူပီး", "si": "පාකිස්ථාන රුපියල", "ta": "பாகிஸ்தான் ரூபாய்"}, "EUR": {"bn": "ইউরো", "en": "Euro", "hi": "यूरो", "ur": "یورو", "ne": "युरो", "my": "ယူရို", "si": "යුරෝ", "ta": "யூரோ"}, "GBP": {"bn": "ব্রিটিশ পাউন্ড", "en": "British Pound", "hi": "ब्रिटिश पाउंड", "ur": "برطانوی پاؤنڈ", "ne": "ब्रिटिस पाउन्ड", "my": "ဗြိတိသျှ ပေါင်", "si": "බ්‍රිතාන්‍ය පවුම", "ta": "பிரித்தானிய பவுண்ட்"}, "JPY": {"bn": "জাপানি ইয়েন", "en": "Japanese Yen", "hi": "जापानी येन", "ur": "جاپانی ین", "ne": "जापानी येन", "my": "ဂျပန် ယန်း", "si": "ජපාන යෙන්", "ta": "ஜப்பானிய யென்"}, "CNY": {"bn": "চীনা ইউয়ান", "en": "Chinese Yuan", "hi": "चीनी युआन", "ur": "چینی یوآن", "ne": "चिनियाँ युआन", "my": "တရုတ် ယွမ်", "si": "චීන යුවාන්", "ta": "சீன யுவான்"}, "AED": {"bn": "আমিরাত দিরহাম", "en": "UAE Dirham", "hi": "यूएई दिरहम", "ur": "متحدہ عرب امارات درہم", "ne": "युएई दिराम", "my": "ယူအေအီး ဒါဟမ်", "si": "එ.අ.එ. ඩිරාම්", "ta": "ஐக்கிய அரபு எமிரேட் திர்ஹம்"}, "SAR": {"bn": "সৌদি রিয়াল", "en": "Saudi Riyal", "hi": "सऊदी रियाल", "ur": "سعودی ریال", "ne": "साउदी रियाल", "my": "ဆော်ဒီ ရီယယ်", "si": "සවුදි රියාල්", "ta": "சவுதி ரியால்"}, "AUD": {"bn": "অস্ট্রেলিয়ান ডলার", "en": "Australian Dollar", "hi": "ऑस्ट्रेलियाई डॉलर", "ur": "آسٹریلوی ڈالر", "ne": "अस्ट्रेलियाली डलर", "my": "ဩစတြေးလျ ဒေါ်လာ", "si": "ඕස්ට්‍රේලියානු ඩොලරය", "ta": "ஆஸ்திரேலிய டாலர்"}, "CAD": {"bn": "কানাডিয়ান ডলার", "en": "Canadian Dollar", "hi": "कनाडाई डॉलर", "ur": "کینیڈین ڈالر", "ne": "क्यानेडियाली डलर", "my": "ကနေဒါ ဒေါ်လာ", "si": "කැනේඩියානු ඩොලරය", "ta": "கனடிய டாலர்"}, "SGD": {"bn": "সিঙ্গাপুর ডলার", "en": "Singapore Dollar", "hi": "सिंगापुर डॉलर", "ur": "سنگاپور ڈالر", "ne": "सिंगापुर डलर", "my": "စင်ကာပူ ဒေါ်လာ", "si": "සිංගප්පූරු ඩොලරය", "ta": "சிங்கப்பூர் டாலர்"}}, "months": {"bn": ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"], "hi": ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्तूबर", "नवंबर", "दिसंबर"], "ur": ["جنوری", "فروری", "مارچ", "اپریل", "مئی", "جون", "جولائی", "اگست", "ستمبر", "اکتوبر", "نومبر", "دسمبر"], "ne": ["जनवरी", "फेब्रुअरी", "मार्च", "अप्रिल", "मे", "जुन", "जुलाई", "अगस्ट", "सेप्टेम्बर", "अक्टोबर", "नोभेम्बर", "डिसेम्बर"], "my": ["ဇန်နဝါရီ", "ဖေဖော်ဝါရီ", "မတ်", "ဧပြီ", "မေ", "ဇွန်", "ဇူလိုင်", "ဩဂုတ်", "စက်တင်ဘာ", "အောက်တိုဘာ", "နိုဝင်ဘာ", "ဒီဇင်ဘာ"], "si": ["ජනවාරි", "පෙබරවාරි", "මාර්තු", "අප්‍රේල්", "මැයි", "ජූනි", "ජූලි", "අගෝස්තු", "සැප්තැම්බර්", "ඔක්තෝබර්", "නොවැම්බර්", "දෙසැම්බර්"], "ta": ["ஜனவரி", "பிப்ரவரி", "மார்ச்", "ஏப்ரல்", "மே", "ஜூன்", "ஜூலை", "ஆகஸ்ட்", "செப்டம்பர்", "அக்டோபர்", "நவம்பர்", "டிசம்பர்"]}, "digits": {"bn": {"0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪", "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"}, "hi": {"0": "०", "1": "१", "2": "२", "3": "३", "4": "४", "5": "५", "6": "६", "7": "७", "8": "८", "9": "९"}, "ne": {"0": "०", "1": "१", "2": "२", "3": "३", "4": "४", "5": "५", "6": "६", "7": "७", "8": "८", "9": "९"}, "ur": {"0": "۰", "1": "۱", "2": "۲", "3": "۳", "4": "۴", "5": "۵", "6": "۶", "7": "۷", "8": "۸", "9": "۹"}, "my": {"0": "၀", "1": "၁", "2": "၂", "3": "၃", "4": "၄", "5": "၅", "6": "၆", "7": "၇", "8": "၈", "9": "၉"}}, "ui": {"title": {"bn": "💵 ডলার রেট", "en": "💵 Dollar Rate", "hi": "💵 डॉलर रेट", "ur": "💵 ڈالر ریٹ", "ne": "💵 डलर रेट", "my": "💵 ဒေါ်လာဈေးနှုန်း", "si": "💵 ඩොලර් අගය", "ta": "💵 டாலர் விலை"}, "tagline": {"bn": "যেকোনো দেশের কারেন্সিতে ১ ডলারের দাম — লাইভ", "en": "Live dollar rate in any currency", "hi": "किसी भी देश की करेंसी में 1 डॉलर की कीमत — लाइव", "ur": "کسی بھی ملک کی کرنسی میں 1 ڈالر کی قیمت — لائیو", "ne": "कुनै पनि देशको मुद्रामा १ डलरको मूल्य — लाइभ", "my": "ဘယ်နိုင်ငံရဲ့ ငွေကြေးနဲ့မဆို ၁ ဒေါ်လာဈေး — တိုက်ရိုက်", "si": "ඕනෑම රටක මුදලින් ඩොලර් 1 ක මිල — සජීවීව", "ta": "எந்த நாட்டு நாணயத்திலும் 1 டாலர் விலை — நேரடியாக"}, "foot": {"bn": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "en": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "hi": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "ur": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "ne": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "my": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "si": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "ta": "Dollar Rate Any Currency • @usdtrateanycurrency_bot"}, "live": {"bn": "লাইভ রেট", "en": "Live rates", "hi": "लाइव रेट", "ur": "لائیو ریٹ", "ne": "लाइभ रेट", "my": "တိုက်ရိုက်ဈေး", "si": "සජීවී මිල", "ta": "நேரடி விலை"}, "nav_home": {"bn": "হোম", "en": "Home", "hi": "होम", "ur": "ہوم", "ne": "होम", "my": "ပင်မ", "si": "මුල් පිටුව", "ta": "முகப்பு"}, "currencies": {"bn": "টি কারেন্সি", "en": "currencies", "hi": "करेंसी", "ur": "کرنسیاں", "ne": "मुद्रा", "my": "ငွေကြေး", "si": "මුදල්", "ta": "நாணயங்கள்"}, "amount": {"bn": "পরিমাণ", "en": "Amount", "hi": "राशि", "ur": "رقم", "ne": "रकम", "my": "ပမာဏ", "si": "ප්‍රමාණය", "ta": "தொகை"}, "from": {"bn": "থেকে", "en": "From", "hi": "से", "ur": "سے", "ne": "बाट", "my": "မှ", "si": "සිට", "ta": "இருந்து"}, "to": {"bn": "এতে", "en": "To", "hi": "को", "ur": "تک", "ne": "मा", "my": "သို့", "si": "දක්වා", "ta": "க்கு"}, "usd_name": {"bn": "মার্কিন ডলার", "en": "US Dollar", "hi": "अमेरिकी डॉलर", "ur": "امریکی ڈالر", "ne": "अमेरिकी डलर", "my": "အမေရိကန် ဒေါ်လာ", "si": "ඇමරිකානු ඩොලරය", "ta": "அமெரிக்க டாலர்"}, "updated": {"bn": "আপডেট", "en": "Updated", "hi": "अपडेट", "ur": "اپ ڈیٹ", "ne": "अपडेट", "my": "အပ်ဒိတ်", "si": "යාවත්කාලීන", "ta": "புதுப்பிக்கப்பட்டது"}, "loading": {"bn": "লোড হচ্ছে…", "en": "Loading…", "hi": "लोड हो रहा है…", "ur": "لوڈ ہو رہا ہے…", "ne": "लोड हुँदैछ…", "my": "တင်နေသည်…", "si": "පූරණය වෙමින්…", "ta": "ஏற்றுகிறது…"}, "refresh": {"bn": "↻ রেট রিফ্রেশ করো", "en": "↻ Refresh rates", "hi": "↻ रेट रीफ़्रेश करें", "ur": "↻ ریٹ ریفریش کریں", "ne": "↻ रेट रिफ्रेस गर्नुहोस्", "my": "↻ ဈေးနှုန်းပြန်တင်ပါ", "si": "↻ මිල නැවත ලබා ගන්න", "ta": "↻ விலையைப் புதுப்பிக்கவும்"}, "tap_hint": {"bn": "👆 যেকোনো কারেন্সিতে চাপ দিলে সেটা “এতে” হবে", "en": "👆 Tap a currency to set it as the target", "hi": "👆 किसी करेंसी पर टैप करें, वह “को” बन जाएगी", "ur": "👆 کسی کرنسی پر ٹیپ کریں، وہ منزل بن جائے گی", "ne": "👆 कुनै मुद्रामा ट्याप गर्नुहोस्, त्यो गन्तव्य बन्नेछ", "my": "👆 ငွေကြေးတစ်ခုခုကို နှိပ်ရင် အဲဒါက ပစ်မှတ်ဖြစ်သွားမယ်", "si": "👆 මුදලක් මත තට්ටු කරන්න, එය ඉලක්කය වේවි", "ta": "👆 ஒரு நாணயத்தைத் தட்டினால் அது இலக்காகும்"}, "menu_rate": {"bn": "💵 ডলার রেট", "en": "💵 Dollar Rate", "hi": "💵 डॉलर रेट", "ur": "💵 ڈالر ریٹ", "ne": "💵 डलर रेट", "my": "💵 ဒေါ်လာဈေးနှုန်း", "si": "💵 ඩොලර් අගය", "ta": "💵 டாலர் விலை"}, "menu_rate_sub": {"bn": "১২ কারেন্সির লাইভ রেট", "en": "Live rates for 12 currencies", "hi": "१२ करेंसी के लाइव रेट", "ur": "۱۲ کرنسیوں کے لائیو ریٹ", "ne": "१२ मुद्राको लाइभ रेट", "my": "ငွေကြေး ၁၂ မျိုးရဲ့ တိုက်ရိုက်ဈေး", "si": "මුදල් 12 ක සජීවී මිල", "ta": "12 நாணயங்களின் நேரடி விலை"}, "menu_lang": {"bn": "🌐 ভাষা", "en": "🌐 Language", "hi": "🌐 भाषा", "ur": "🌐 زبان", "ne": "🌐 भाषा", "my": "🌐 ဘာသာစကား", "si": "🌐 භාෂාව", "ta": "🌐 மொழி"}, "menu_lang_sub": {"bn": "৮টি ভাষায় অ্যাপটি ব্যবহার করো", "en": "Use the app in 8 languages", "hi": "ऐप को 8 भाषाओं में इस्तेमाल करें", "ur": "ایپ 8 زبانوں میں استعمال کریں", "ne": "एप ८ भाषामा प्रयोग गर्नुहोस्", "my": "အက်ပ်ကို ဘာသာစကား ၈ မျိုးနဲ့ သုံးပါ", "si": "යෙදුම භාෂා 8 කින් භාවිතා කරන්න", "ta": "செயலியை 8 மொழிகளில் பயன்படுத்துங்கள்"}, "back": {"bn": "← ফিরে যাও", "en": "← Back", "hi": "← वापस", "ur": "← واپس", "ne": "← फर्कनुहोस्", "my": "← ပြန်သွားမယ်", "si": "← ආපසු", "ta": "← திரும்பு"}, "menu_tr": {"bn": "🔤 অনুবাদ", "en": "🔤 Translator", "hi": "🔤 अनुवादक", "ur": "🔤 مترجم", "ne": "🔤 अनुवादक", "my": "🔤 ဘာသာပြန်သူ", "si": "🔤 පරිවර්තක", "ta": "🔤 மொழிபெயர்ப்பாளர்"}, "menu_tr_sub": {"bn": "যেকোনো লেখা যেকোনো ভাষায় অনুবাদ করো", "en": "Translate any text to any language", "hi": "किसी भी पाठ का किसी भी भाषा में अनुवाद करें", "ur": "کسی بھی تحریر کا کسی بھی زبان میں ترجمہ کریں", "ne": "कुनै पनि पाठ कुनै पनि भाषामा अनुवाद गर्नुहोस्", "my": "စာသားတိုင်းကို ဘာသာစကားတိုင်းသို့ ဘာသာပြန်ပါ", "si": "ඕනෑම පෙළක් ඕනෑම භාෂාවකට පරිවර්තනය කරන්න", "ta": "எந்த உரையையும் எந்த மொழிக்கும் மொழிபெயர்க்கவும்"}, "tr_input": {"bn": "লেখা", "en": "Text", "hi": "पाठ", "ur": "متن", "ne": "पाठ", "my": "စာသား", "si": "පෙළ", "ta": "உரை"}, "tr_to": {"bn": "কোন ভাষায়", "en": "Translate to", "hi": "किस भाषा में", "ur": "کس زبان میں", "ne": "कुन भाषामा", "my": "ဘယ်ဘာသာစကားသို့", "si": "කවර භාෂාවටද", "ta": "எந்த மொழிக்கு"}, "tr_placeholder": {"bn": "অনুবাদ করার লেখা লিখো…", "en": "Type text to translate…", "hi": "अनुवाद करने के लिए लिखिए…", "ur": "ترجمہ کرنے کے لیے لکھیں…", "ne": "अनुवाद गर्ने पाठ लेख्नुहोस्…", "my": "ဘာသာပြန်မယ့် စာသားရိုက်ပါ…", "si": "පරිවර්තනය කිරීමට පෙළ ලියන්න…", "ta": "மொழிபெயர்க்க உரையைத் தட்டச்சு செய்க…"}, "tr_button": {"bn": "🔤 অনুবাদ করো", "en": "🔤 Translate", "hi": "🔤 अनुवाद करें", "ur": "🔤 ترجمہ کریں", "ne": "🔤 अनुवाद गर्नुहोस्", "my": "🔤 ဘာသာပြန်ပါ", "si": "🔤 පරිවර්තනය කරන්න", "ta": "🔤 மொழிபெயர்க்கவும்"}, "tr_error": {"bn": "⚠️ অনুবাদ করা গেল না: {e}", "en": "⚠️ Couldn't translate: {e}", "hi": "⚠️ अनुवाद नहीं हो पाया: {e}", "ur": "⚠️ ترجمہ نہیں ہو سکا: {e}", "ne": "⚠️ अनुवाद गर्न सकिएन: {e}", "my": "⚠️ ဘာသာပြန်လို့ မရခဲ့ပါ: {e}", "si": "⚠️ පරිවර්තනය කළ නොහැකි විය: {e}", "ta": "⚠️ மொழிபெயர்க்க முடியவில்லை: {e}"}, "source": {"bn": "সূত্র: open.er-api.com", "en": "Source: open.er-api.com", "hi": "स्रोत: open.er-api.com", "ur": "ماخذ: open.er-api.com", "ne": "स्रोत: open.er-api.com", "my": "ရင်းမြစ်: open.er-api.com", "si": "මූලාශ්‍රය: open.er-api.com", "ta": "மூலம்: open.er-api.com"}, "popular": {"bn": "💵 জনপ্রিয় কারেন্সিতে ১ ডলারের দাম:", "en": "💵 1 USD in popular currencies:", "hi": "💵 लोकप्रिय करेंसी में 1 डॉलर की कीमत:", "ur": "💵 مقبول کرنسیوں میں 1 ڈالر کی قیمت:", "ne": "💵 लोकप्रिय मुद्रामा १ डलरको मूल्य:", "my": "💵 လူကြိုက်များတဲ့ ငွေကြေးတွေမှာ ၁ ဒေါ်လာရဲ့ဈေးနှုန်း:", "si": "💵 ජනප්‍රිය මුදල්වලින් ඩොලර් 1ක මිල:", "ta": "💵 பிரபலமான நாணயங்களில் 1 டாலரின் விலை:"}, "error": {"bn": "⚠️ রেট আনতে সমস্যা হয়েছে: {e}", "en": "⚠️ Couldn't fetch the rate: {e}", "hi": "⚠️ रेट लाने में दिक्कत हुई: {e}", "ur": "⚠️ ریٹ لانے میں مسئلہ ہوا: {e}", "ne": "⚠️ रेट ल्याउन समस्या भयो: {e}", "my": "⚠️ ဈေးနှုန်းရယူရာမှာ အခက်အခဲဖြစ်သွားပါတယ်: {e}", "si": "⚠️ මිල ලබා ගැනීමේදී ගැටලුවක් ඇතිවුණා: {e}", "ta": "⚠️ விலையைப் பெறுவதில் சிக்கல்: {e}"}, "lang_menu": {"bn": "🌐 ভাষা বেছে নাও:", "en": "🌐 Choose your language:", "hi": "🌐 अपनी भाषा चुनें:", "ur": "🌐 اپنی زبان منتخب کریں:", "ne": "🌐 आफ्नो भाषा छान्नुहोस्:", "my": "🌐 ဘာသာစကားကို ရွေးချယ်ပါ:", "si": "🌐 ඔබේ භාෂාව තෝරන්න:", "ta": "🌐 உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்:"}}};
+const DATA = {"langs": ["bn", "en", "hi", "ur", "ne", "my", "si", "ta"], "langButtons": {"bn": "🇧🇩 বাংলা", "en": "🇬🇧 English", "hi": "🇮🇳 हिन्दी", "ur": "🇵🇰 اردو", "ne": "🇳🇵 नेपाली", "my": "🇲🇲 မြန်မာ", "si": "🇱🇰 සිංහල", "ta": "🇮🇳 தமிழ்"}, "codes": ["BDT", "INR", "PKR", "EUR", "GBP", "JPY", "CNY", "AED", "SAR", "AUD", "CAD", "SGD"], "names": {"BDT": {"bn": "বাংলাদেশি টাকা", "en": "Bangladeshi Taka", "hi": "बांग्लादेशी टका", "ur": "بنگلہ دیشی ٹکا", "ne": "बंगलादेशी टका", "my": "ဘင်္ဂလားဒေ့ရှ် တာကာ", "si": "බංග්ලාදේශ ටකා", "ta": "வங்கதேச டாக்கா"}, "INR": {"bn": "ভারতীয় রুপি", "en": "Indian Rupee", "hi": "भारतीय रुपया", "ur": "بھارتی روپیہ", "ne": "भारतीय रुपियाँ", "my": "အိန္ဒိယ ရူပီး", "si": "ඉන්දීය රුපියල", "ta": "இந்திய ரூபாய்"}, "PKR": {"bn": "পাকিস্তানি রুপি", "en": "Pakistani Rupee", "hi": "पाकिस्तानी रुपया", "ur": "پاکستانی روپیہ", "ne": "पाकिस्तानी रुपियाँ", "my": "ပါကစ္စတန် ရူပီး", "si": "පාකිස්ථාන රුපියල", "ta": "பாகிஸ்தான் ரூபாய்"}, "EUR": {"bn": "ইউরো", "en": "Euro", "hi": "यूरो", "ur": "یورو", "ne": "युरो", "my": "ယူရို", "si": "යුරෝ", "ta": "யூரோ"}, "GBP": {"bn": "ব্রিটিশ পাউন্ড", "en": "British Pound", "hi": "ब्रिटिश पाउंड", "ur": "برطانوی پاؤنڈ", "ne": "ब्रिटिस पाउन्ड", "my": "ဗြိတိသျှ ပေါင်", "si": "බ්‍රිතාන්‍ය පවුම", "ta": "பிரித்தானிய பவுண்ட்"}, "JPY": {"bn": "জাপানি ইয়েন", "en": "Japanese Yen", "hi": "जापानी येन", "ur": "جاپانی ین", "ne": "जापानी येन", "my": "ဂျပန် ယန်း", "si": "ජපාන යෙන්", "ta": "ஜப்பானிய யென்"}, "CNY": {"bn": "চীনা ইউয়ান", "en": "Chinese Yuan", "hi": "चीनी युआन", "ur": "چینی یوآن", "ne": "चिनियाँ युआन", "my": "တရုတ် ယွမ်", "si": "චීන යුවාන්", "ta": "சீன யுவான்"}, "AED": {"bn": "আমিরাত দিরহাম", "en": "UAE Dirham", "hi": "यूएई दिरहम", "ur": "متحدہ عرب امارات درہم", "ne": "युएई दिराम", "my": "ယူအေအီး ဒါဟမ်", "si": "එ.අ.එ. ඩිරාම්", "ta": "ஐக்கிய அரபு எமிரேட் திர்ஹம்"}, "SAR": {"bn": "সৌদি রিয়াল", "en": "Saudi Riyal", "hi": "सऊदी रियाल", "ur": "سعودی ریال", "ne": "साउदी रियाल", "my": "ဆော်ဒီ ရီယယ်", "si": "සවුදි රියාල්", "ta": "சவுதி ரியால்"}, "AUD": {"bn": "অস্ট্রেলিয়ান ডলার", "en": "Australian Dollar", "hi": "ऑस्ट्रेलियाई डॉलर", "ur": "آسٹریلوی ڈالر", "ne": "अस्ट्रेलियाली डलर", "my": "ဩစတြေးလျ ဒေါ်လာ", "si": "ඕස්ට්‍රේලියානු ඩොලරය", "ta": "ஆஸ்திரேலிய டாலர்"}, "CAD": {"bn": "কানাডিয়ান ডলার", "en": "Canadian Dollar", "hi": "कनाडाई डॉलर", "ur": "کینیڈین ڈالر", "ne": "क्यानेडियाली डलर", "my": "ကနေဒါ ဒေါ်လာ", "si": "කැනේඩියානු ඩොලරය", "ta": "கனடிய டாலர்"}, "SGD": {"bn": "সিঙ্গাপুর ডলার", "en": "Singapore Dollar", "hi": "सिंगापुर डॉलर", "ur": "سنگاپور ڈالر", "ne": "सिंगापुर डलर", "my": "စင်ကာပူ ဒေါ်လာ", "si": "සිංගප්පූරු ඩොලරය", "ta": "சிங்கப்பூர் டாலர்"}}, "months": {"bn": ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"], "hi": ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्तूबर", "नवंबर", "दिसंबर"], "ur": ["جنوری", "فروری", "مارچ", "اپریل", "مئی", "جون", "جولائی", "اگست", "ستمبر", "اکتوبر", "نومبر", "دسمبر"], "ne": ["जनवरी", "फेब्रुअरी", "मार्च", "अप्रिल", "मे", "जुन", "जुलाई", "अगस्ट", "सेप्टेम्बर", "अक्टोबर", "नोभेम्बर", "डिसेम्बर"], "my": ["ဇန်နဝါရီ", "ဖေဖော်ဝါရီ", "မတ်", "ဧပြီ", "မေ", "ဇွန်", "ဇူလိုင်", "ဩဂုတ်", "စက်တင်ဘာ", "အောက်တိုဘာ", "နိုဝင်ဘာ", "ဒီဇင်ဘာ"], "si": ["ජනවාරි", "පෙබරවාරි", "මාර්තු", "අප්‍රේල්", "මැයි", "ජූනි", "ජූලි", "අගෝස්තු", "සැප්තැම්බර්", "ඔක්තෝබර්", "නොවැම්බර්", "දෙසැම්බර්"], "ta": ["ஜனவரி", "பிப்ரவரி", "மார்ச்", "ஏப்ரல்", "மே", "ஜூன்", "ஜூலை", "ஆகஸ்ட்", "செப்டம்பர்", "அக்டோபர்", "நவம்பர்", "டிசம்பர்"]}, "digits": {"bn": {"0": "০", "1": "১", "2": "২", "3": "৩", "4": "৪", "5": "৫", "6": "৬", "7": "৭", "8": "৮", "9": "৯"}, "hi": {"0": "०", "1": "१", "2": "२", "3": "३", "4": "४", "5": "५", "6": "६", "7": "७", "8": "८", "9": "९"}, "ne": {"0": "०", "1": "१", "2": "२", "3": "३", "4": "४", "5": "५", "6": "६", "7": "७", "8": "८", "9": "९"}, "ur": {"0": "۰", "1": "۱", "2": "۲", "3": "۳", "4": "۴", "5": "۵", "6": "۶", "7": "۷", "8": "۸", "9": "۹"}, "my": {"0": "၀", "1": "၁", "2": "၂", "3": "၃", "4": "၄", "5": "၅", "6": "၆", "7": "၇", "8": "၈", "9": "၉"}}, "ui": {"title": {"bn": "A to Z", "en": "A to Z", "hi": "A to Z", "ur": "A to Z", "ne": "A to Z", "my": "A to Z", "si": "A to Z", "ta": "A to Z"}, "tagline": {"bn": "যেকোনো দেশের কারেন্সিতে ১ ডলারের দাম — লাইভ", "en": "Live dollar rate in any currency", "hi": "किसी भी देश की करेंसी में 1 डॉलर की कीमत — लाइव", "ur": "کسی بھی ملک کی کرنسی میں 1 ڈالر کی قیمت — لائیو", "ne": "कुनै पनि देशको मुद्रामा १ डलरको मूल्य — लाइभ", "my": "ဘယ်နိုင်ငံရဲ့ ငွေကြေးနဲ့မဆို ၁ ဒေါ်လာဈေး — တိုက်ရိုက်", "si": "ඕනෑම රටක මුදලින් ඩොලර් 1 ක මිල — සජීවීව", "ta": "எந்த நாட்டு நாணயத்திலும் 1 டாலர் விலை — நேரடியாக"}, "foot": {"bn": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "en": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "hi": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "ur": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "ne": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "my": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "si": "Dollar Rate Any Currency • @usdtrateanycurrency_bot", "ta": "Dollar Rate Any Currency • @usdtrateanycurrency_bot"}, "live": {"bn": "লাইভ রেট", "en": "Live rates", "hi": "लाइव रेट", "ur": "لائیو ریٹ", "ne": "लाइभ रेट", "my": "တိုက်ရိုက်ဈေး", "si": "සජීවී මිල", "ta": "நேரடி விலை"}, "nav_home": {"bn": "হোম", "en": "Home", "hi": "होम", "ur": "ہوم", "ne": "होम", "my": "ပင်မ", "si": "මුල් පිටුව", "ta": "முகப்பு"}, "currencies": {"bn": "টি কারেন্সি", "en": "currencies", "hi": "करेंसी", "ur": "کرنسیاں", "ne": "मुद्रा", "my": "ငွေကြေး", "si": "මුදල්", "ta": "நாணயங்கள்"}, "amount": {"bn": "পরিমাণ", "en": "Amount", "hi": "राशि", "ur": "رقم", "ne": "रकम", "my": "ပမာဏ", "si": "ප්‍රමාණය", "ta": "தொகை"}, "from": {"bn": "থেকে", "en": "From", "hi": "से", "ur": "سے", "ne": "बाट", "my": "မှ", "si": "සිට", "ta": "இருந்து"}, "to": {"bn": "এতে", "en": "To", "hi": "को", "ur": "تک", "ne": "मा", "my": "သို့", "si": "දක්වා", "ta": "க்கு"}, "usd_name": {"bn": "মার্কিন ডলার", "en": "US Dollar", "hi": "अमेरिकी डॉलर", "ur": "امریکی ڈالر", "ne": "अमेरिकी डलर", "my": "အမေရိကန် ဒေါ်လာ", "si": "ඇමරිකානු ඩොලරය", "ta": "அமெரிக்க டாலர்"}, "updated": {"bn": "আপডেট", "en": "Updated", "hi": "अपडेट", "ur": "اپ ڈیٹ", "ne": "अपडेट", "my": "အပ်ဒိတ်", "si": "යාවත්කාලීන", "ta": "புதுப்பிக்கப்பட்டது"}, "loading": {"bn": "লোড হচ্ছে…", "en": "Loading…", "hi": "लोड हो रहा है…", "ur": "لوڈ ہو رہا ہے…", "ne": "लोड हुँदैछ…", "my": "တင်နေသည်…", "si": "පූරණය වෙමින්…", "ta": "ஏற்றுகிறது…"}, "refresh": {"bn": "↻ রেট রিফ্রেশ করো", "en": "↻ Refresh rates", "hi": "↻ रेट रीफ़्रेश करें", "ur": "↻ ریٹ ریفریش کریں", "ne": "↻ रेट रिफ्रेस गर्नुहोस्", "my": "↻ ဈေးနှုန်းပြန်တင်ပါ", "si": "↻ මිල නැවත ලබා ගන්න", "ta": "↻ விலையைப் புதுப்பிக்கவும்"}, "tap_hint": {"bn": "👆 যেকোনো কারেন্সিতে চাপ দিলে সেটা “এতে” হবে", "en": "👆 Tap a currency to set it as the target", "hi": "👆 किसी करेंसी पर टैप करें, वह “को” बन जाएगी", "ur": "👆 کسی کرنسی پر ٹیپ کریں، وہ منزل بن جائے گی", "ne": "👆 कुनै मुद्रामा ट्याप गर्नुहोस्, त्यो गन्तव्य बन्नेछ", "my": "👆 ငွေကြေးတစ်ခုခုကို နှိပ်ရင် အဲဒါက ပစ်မှတ်ဖြစ်သွားမယ်", "si": "👆 මුදලක් මත තට්ටු කරන්න, එය ඉලක්කය වේවි", "ta": "👆 ஒரு நாணயத்தைத் தட்டினால் அது இலக்காகும்"}, "menu_rate": {"bn": "💵 ডলার রেট", "en": "💵 Dollar Rate", "hi": "💵 डॉलर रेट", "ur": "💵 ڈالر ریٹ", "ne": "💵 डलर रेट", "my": "💵 ဒေါ်လာဈေးနှုန်း", "si": "💵 ඩොලර් අගය", "ta": "💵 டாலர் விலை"}, "menu_rate_sub": {"bn": "১২ কারেন্সির লাইভ রেট", "en": "Live rates for 12 currencies", "hi": "१२ करेंसी के लाइव रेट", "ur": "۱۲ کرنسیوں کے لائیو ریٹ", "ne": "१२ मुद्राको लाइभ रेट", "my": "ငွေကြေး ၁၂ မျိုးရဲ့ တိုက်ရိုက်ဈေး", "si": "මුදල් 12 ක සජීවී මිල", "ta": "12 நாணயங்களின் நேரடி விலை"}, "menu_lang": {"bn": "🌐 ভাষা", "en": "🌐 Language", "hi": "🌐 भाषा", "ur": "🌐 زبان", "ne": "🌐 भाषा", "my": "🌐 ဘာသာစကား", "si": "🌐 භාෂාව", "ta": "🌐 மொழி"}, "menu_lang_sub": {"bn": "৮টি ভাষায় অ্যাপটি ব্যবহার করো", "en": "Use the app in 8 languages", "hi": "ऐप को 8 भाषाओं में इस्तेमाल करें", "ur": "ایپ 8 زبانوں میں استعمال کریں", "ne": "एप ८ भाषामा प्रयोग गर्नुहोस्", "my": "အက်ပ်ကို ဘာသာစကား ၈ မျိုးနဲ့ သုံးပါ", "si": "යෙදුම භාෂා 8 කින් භාවිතා කරන්න", "ta": "செயலியை 8 மொழிகளில் பயன்படுத்துங்கள்"}, "back": {"bn": "← ফিরে যাও", "en": "← Back", "hi": "← वापस", "ur": "← واپس", "ne": "← फर्कनुहोस्", "my": "← ပြန်သွားမယ်", "si": "← ආපසු", "ta": "← திரும்பு"}, "menu_tr": {"bn": "🔤 অনুবাদ", "en": "🔤 Translator", "hi": "🔤 अनुवादक", "ur": "🔤 مترجم", "ne": "🔤 अनुवादक", "my": "🔤 ဘာသာပြန်သူ", "si": "🔤 පරිවර්තක", "ta": "🔤 மொழிபெயர்ப்பாளர்"}, "menu_tr_sub": {"bn": "যেকোনো লেখা যেকোনো ভাষায় অনুবাদ করো", "en": "Translate any text to any language", "hi": "किसी भी पाठ का किसी भी भाषा में अनुवाद करें", "ur": "کسی بھی تحریر کا کسی بھی زبان میں ترجمہ کریں", "ne": "कुनै पनि पाठ कुनै पनि भाषामा अनुवाद गर्नुहोस्", "my": "စာသားတိုင်းကို ဘာသာစကားတိုင်းသို့ ဘာသာပြန်ပါ", "si": "ඕනෑම පෙළක් ඕනෑම භාෂාවකට පරිවර්තනය කරන්න", "ta": "எந்த உரையையும் எந்த மொழிக்கும் மொழிபெயர்க்கவும்"}, "tr_input": {"bn": "লেখা", "en": "Text", "hi": "पाठ", "ur": "متن", "ne": "पाठ", "my": "စာသား", "si": "පෙළ", "ta": "உரை"}, "tr_to": {"bn": "কোন ভাষায়", "en": "Translate to", "hi": "किस भाषा में", "ur": "کس زبان میں", "ne": "कुन भाषामा", "my": "ဘယ်ဘာသာစကားသို့", "si": "කවර භාෂාවටද", "ta": "எந்த மொழிக்கு"}, "tr_placeholder": {"bn": "অনুবাদ করার লেখা লিখো…", "en": "Type text to translate…", "hi": "अनुवाद करने के लिए लिखिए…", "ur": "ترجمہ کرنے کے لیے لکھیں…", "ne": "अनुवाद गर्ने पाठ लेख्नुहोस्…", "my": "ဘာသာပြန်မယ့် စာသားရိုက်ပါ…", "si": "පරිවර්තනය කිරීමට පෙළ ලියන්න…", "ta": "மொழிபெயர்க்க உரையைத் தட்டச்சு செய்க…"}, "tr_button": {"bn": "🔤 অনুবাদ করো", "en": "🔤 Translate", "hi": "🔤 अनुवाद करें", "ur": "🔤 ترجمہ کریں", "ne": "🔤 अनुवाद गर्नुहोस्", "my": "🔤 ဘာသာပြန်ပါ", "si": "🔤 පරිවර්තනය කරන්න", "ta": "🔤 மொழிபெயர்க்கவும்"}, "tr_error": {"bn": "⚠️ অনুবাদ করা গেল না: {e}", "en": "⚠️ Couldn't translate: {e}", "hi": "⚠️ अनुवाद नहीं हो पाया: {e}", "ur": "⚠️ ترجمہ نہیں ہو سکا: {e}", "ne": "⚠️ अनुवाद गर्न सकिएन: {e}", "my": "⚠️ ဘာသာပြန်လို့ မရခဲ့ပါ: {e}", "si": "⚠️ පරිවර්තනය කළ නොහැකි විය: {e}", "ta": "⚠️ மொழிபெயர்க்க முடியவில்லை: {e}"}, "source": {"bn": "সূত্র: open.er-api.com", "en": "Source: open.er-api.com", "hi": "स्रोत: open.er-api.com", "ur": "ماخذ: open.er-api.com", "ne": "स्रोत: open.er-api.com", "my": "ရင်းမြစ်: open.er-api.com", "si": "මූලාශ්‍රය: open.er-api.com", "ta": "மூலம்: open.er-api.com"}, "popular": {"bn": "💵 জনপ্রিয় কারেন্সিতে ১ ডলারের দাম:", "en": "💵 1 USD in popular currencies:", "hi": "💵 लोकप्रिय करेंसी में 1 डॉलर की कीमत:", "ur": "💵 مقبول کرنسیوں میں 1 ڈالر کی قیمت:", "ne": "💵 लोकप्रिय मुद्रामा १ डलरको मूल्य:", "my": "💵 လူကြိုက်များတဲ့ ငွေကြေးတွေမှာ ၁ ဒေါ်လာရဲ့ဈေးနှုန်း:", "si": "💵 ජනප්‍රිය මුදල්වලින් ඩොලර් 1ක මිල:", "ta": "💵 பிரபலமான நாணயங்களில் 1 டாலரின் விலை:"}, "error": {"bn": "⚠️ রেট আনতে সমস্যা হয়েছে: {e}", "en": "⚠️ Couldn't fetch the rate: {e}", "hi": "⚠️ रेट लाने में दिक्कत हुई: {e}", "ur": "⚠️ ریٹ لانے میں مسئلہ ہوا: {e}", "ne": "⚠️ रेट ल्याउन समस्या भयो: {e}", "my": "⚠️ ဈေးနှုန်းရယူရာမှာ အခက်အခဲဖြစ်သွားပါတယ်: {e}", "si": "⚠️ මිල ලබා ගැනීමේදී ගැටලුවක් ඇතිවුණා: {e}", "ta": "⚠️ விலையைப் பெறுவதில் சிக்கல்: {e}"}, "lang_menu": {"bn": "🌐 ভাষা বেছে নাও:", "en": "🌐 Choose your language:", "hi": "🌐 अपनी भाषा चुनें:", "ur": "🌐 اپنی زبان منتخب کریں:", "ne": "🌐 आफ्नो भाषा छान्नुहोस्:", "my": "🌐 ဘာသာစကားကို ရွေးချယ်ပါ:", "si": "🌐 ඔබේ භාෂාව තෝරන්න:", "ta": "🌐 உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்:"}, "menu_head": {"bn": "A to Z — সব ফিচার", "en": "A to Z — all features", "hi": "A to Z — सभी सुविधाएँ", "ur": "A to Z — تمام خصوصیات", "ne": "A to Z — सबै सुविधा", "my": "A to Z — လုပ်ဆောင်ချက်အားလုံး", "si": "A to Z — සියලුම විශේෂාංග", "ta": "A to Z — அனைத்து அம்சங்கள்"}, "menu_ledger": {"bn": "📒 হিসাবের খাতা", "en": "📒 Ledger", "hi": "📒 हिसाब-किताब", "ur": "📒 حساب کتاب", "ne": "📒 हिसाब किताब", "my": "📒 စာရင်းစာအုပ်", "si": "📒 ගිණුම් පොත", "ta": "📒 கணக்கு புத்தகம்"}, "menu_ledger_sub": {"bn": "দৈনিক আয়-খরচের হিসাব", "en": "Daily income & expense log", "hi": "दैनिक आय-व्यय का हिसाब", "ur": "روزانہ آمدنی و اخراجات کا حساب", "ne": "दैनिक आम्दानी-खर्चको हिसाब", "my": "နေ့စဉ် ဝင်ငွေ-ထွက်ငွေ မှတ်တမ်း", "si": "දෛනික ආදායම් වියදම් සටහන", "ta": "தினசரி வரவு-செலவு பதிவு"}, "menu_calc": {"bn": "🧮 ক্যালকুলেটর", "en": "🧮 Calculator", "hi": "🧮 कैलकुलेटर", "ur": "🧮 کیلکولیٹر", "ne": "🧮 क्यालकुलेटर", "my": "🧮 ဂဏန်းပေါင်းစက်", "si": "🧮 කැල්කියුලේටරය", "ta": "🧮 கால்குலேட்டர்"}, "menu_calc_sub": {"bn": "সাধারণ ও সায়েন্টিফিক", "en": "Normal & scientific", "hi": "सामान्य और वैज्ञानिक", "ur": "عام اور سائنسی", "ne": "साधारण र वैज्ञानिक", "my": "ရိုးရိုးနှင့် သိပ္ပံနည်းကျ", "si": "සාමාන්‍ය සහ විද්‍යාත්මක", "ta": "சாதாரண மற்றும் அறிவியல்"}, "menu_tour": {"bn": "✈️ পর্যটন", "en": "✈️ Tourism", "hi": "✈️ पर्यटन", "ur": "✈️ سیاحت", "ne": "✈️ पर्यटन", "my": "✈️ ခရီးသွား", "si": "✈️ සංචාරක", "ta": "✈️ சுற்றுலா"}, "menu_tour_sub": {"bn": "বিভিন্ন দেশের পর্যটন এলাকা", "en": "Tourist places by country", "hi": "विभिन्न देशों के पर्यटन स्थल", "ur": "مختلف ممالک کی سیاحتی جگہیں", "ne": "विभिन्न देशका पर्यटकीय स्थल", "my": "နိုင်ငံအလိုက် ခရီးသွားနေရာများ", "si": "විවිධ රටවල සංචාරක ස්ථාන", "ta": "பல்வேறு நாடுகளின் சுற்றுலா இடங்கள்"}, "menu_news": {"bn": "📰 নিউজ", "en": "📰 News", "hi": "📰 समाचार", "ur": "📰 خبریں", "ne": "📰 समाचार", "my": "📰 သတင်း", "si": "📰 පුවත්", "ta": "📰 செய்திகள்"}, "menu_news_sub": {"bn": "ক্রিপ্টো, আন্তর্জাতিক, পর্যটন, সোশ্যাল", "en": "Crypto, world, travel, social", "hi": "क्रिप्टो, विश्व, यात्रा, सोशल", "ur": "کرپٹو، دنیا، سفر، سوشل", "ne": "क्रिप्टो, विश्व, यात्रा, सामाजिक", "my": "ခရစ်တို၊ ကမ္ဘာ၊ ခရီးသွား၊ လူမှုကွန်ရက်", "si": "ක්‍රිප්ටෝ, ලෝකය, සංචාරය, සමාජ", "ta": "கிரிப்டோ, உலகம், பயணம், சமூகம்"}, "ledger_in": {"bn": "আয়", "en": "Income", "hi": "आय", "ur": "آمدنی", "ne": "आम्दानी", "my": "ဝင်ငွေ", "si": "ආදායම", "ta": "வரவு"}, "ledger_out": {"bn": "খরচ", "en": "Expense", "hi": "खर्च", "ur": "خرچ", "ne": "खर्च", "my": "ထွက်ငွေ", "si": "වියදම", "ta": "செலவு"}, "ledger_bal": {"bn": "বাকি", "en": "Balance", "hi": "शेष", "ur": "بقایا", "ne": "बाँकी", "my": "လက်ကျန်", "si": "ශේෂය", "ta": "மீதி"}, "ledger_add": {"bn": "➕ যোগ করো", "en": "➕ Add entry", "hi": "➕ जोड़ें", "ur": "➕ شامل کریں", "ne": "➕ थप्नुहोस्", "my": "➕ ထည့်ပါ", "si": "➕ එකතු කරන්න", "ta": "➕ சேர்க்கவும்"}, "ledger_what": {"bn": "কীসের হিসাব?", "en": "What is it for?", "hi": "किस चीज़ का हिसाब?", "ur": "کس چیز کا حساب؟", "ne": "के को हिसाब हो?", "my": "ဘာအတွက်လဲ။", "si": "මොකක්ද?", "ta": "எதற்காக?"}, "ledger_empty": {"bn": "এই মাসে এখনো কোনো হিসাব নেই", "en": "No entries this month yet", "hi": "इस महीने अभी कोई हिसाब नहीं", "ur": "اس مہینے ابھی کوئی حساب نہیں", "ne": "यो महिना अहिलेसम्म कुनै हिसाब छैन", "my": "ဒီလမှာ မှတ်တမ်းမရှိသေးပါ", "si": "මේ මාසයේ තවම සටහන් නැත", "ta": "இந்த மாதம் இன்னும் பதிவுகள் இல்லை"}, "ledger_toolong": {"bn": "হিসাবটা বড় হয়ে গেছে — ছোট করে লিখো", "en": "Entry too long — write it shorter", "hi": "हिसाब बहुत बड़ा है — छोटा लिखें", "ur": "حساب بہت بڑا ہے — مختصر لکھیں", "ne": "हिसाब धेरै लामो भयो — छोटो लेख्नुहोस्", "my": "မှတ်တမ်းရှည်လွန်းတယ် — အတိုချုပ်ရေးပါ", "si": "සටහන දිග වැඩියි — කෙටියෙන් ලියන්න", "ta": "பதிவு மிக நீளமானது — சுருக்கமாக எழுதுங்கள்"}, "ledger_del": {"bn": "মুছো", "en": "Delete", "hi": "हटाएँ", "ur": "حذف کریں", "ne": "हटाउनुहोस्", "my": "ဖျက်ပါ", "si": "මකන්න", "ta": "நீக்கு"}, "calc_sci": {"bn": "সায়েন্টিফিক", "en": "Scientific", "hi": "वैज्ञानिक", "ur": "سائنسی", "ne": "वैज्ञानिक", "my": "သိပ္ပံ", "si": "විද්‍යාත්මක", "ta": "அறிவியல்"}, "calc_err": {"bn": "ভুল", "en": "Error", "hi": "गलत", "ur": "غلط", "ne": "गलत", "my": "မှားယွင်းမှု", "si": "දෝෂය", "ta": "பிழை"}, "tour_places": {"bn": "জায়গা", "en": "places", "hi": "जगह", "ur": "جگہیں", "ne": "ठाउँ", "my": "နေရာများ", "si": "ස්ථාන", "ta": "இடங்கள்"}, "tab_crypto": {"bn": "ক্রিপ্টো", "en": "Crypto", "hi": "क्रिप्टो", "ur": "کرپٹو", "ne": "क्रिप्टो", "my": "ခရစ်တို", "si": "ක්‍රිප්ටෝ", "ta": "கிரிப்டோ"}, "tab_world": {"bn": "আন্তর্জাতিক", "en": "World", "hi": "विश्व", "ur": "دنیا", "ne": "विश्व", "my": "ကမ္ဘာ", "si": "ලෝකය", "ta": "உலகம்"}, "tab_travel": {"bn": "পর্যটন", "en": "Travel", "hi": "यात्रा", "ur": "سفر", "ne": "यात्रा", "my": "ခရီးသွား", "si": "සංචාරය", "ta": "பயணம்"}, "tab_social": {"bn": "সোশ্যাল", "en": "Social", "hi": "सोशल", "ur": "سوشل", "ne": "सामाजिक", "my": "လူမှုကွန်ရက်", "si": "සමාජ", "ta": "சமூகம்"}, "news_error": {"bn": "⚠️ খবর আনা গেল না — পরে আবার চেষ্টা করো", "en": "⚠️ Couldn't load news — try again later", "hi": "⚠️ खबर नहीं आ पाई — बाद में कोशिश करें", "ur": "⚠️ خبریں نہیں آئیں — بعد میں کوشش کریں", "ne": "⚠️ समाचार ल्याउन सकिएन — पछि फेरि प्रयास गर्नुहोस्", "my": "⚠️ သတင်းရယူလို့ မရခဲ့ပါ — နောက်မှ ပြန်ကြိုးစားပါ", "si": "⚠️ පුවත් ලබා ගත නොහැකි විය — පසුව උත්සාහ කරන්න", "ta": "⚠️ செய்திகளை ஏற்ற முடியவில்லை — பின்னர் முயற்சிக்கவும்"}, "news_empty": {"bn": "এখন কোনো খবর নেই", "en": "No news right now", "hi": "अभी कोई खबर नहीं", "ur": "ابھی کوئی خبر نہیں", "ne": "अहिले कुनै समाचार छैन", "my": "အခုသတင်းမရှိပါ", "si": "දැන් පුවත් නැත", "ta": "இப்போது செய்திகள் இல்லை"}}, "tour": [{"code": "BD", "n": {"bn": "বাংলাদেশ", "en": "Bangladesh"}, "places": [{"n": "Cox's Bazar", "bn": "বিশ্বের দীর্ঘতম প্রাকৃতিক সমুদ্র সৈকত", "en": "World's longest natural sea beach"}, {"n": "Sundarbans", "bn": "বিশ্বের বৃহত্তম ম্যানগ্রোভ বন, রয়েল বেঙ্গল টাইগারের আবাস", "en": "Largest mangrove forest, home of the Royal Bengal Tiger"}, {"n": "Sajek Valley", "bn": "মেঘের উপত্যকা — পাহাড়ের উপর ভাসমান মেঘ", "en": "Valley of clouds above the hills"}, {"n": "Saint Martin's Island", "bn": "বাংলাদেশের একমাত্র প্রবাল দ্বীপ", "en": "Bangladesh's only coral island"}]}, {"code": "IN", "n": {"bn": "ভারত", "en": "India"}, "places": [{"n": "Taj Mahal", "bn": "ভালোবাসার প্রতীক, বিশ্বের সপ্তাশ্চর্য", "en": "Symbol of love, Wonder of the World"}, {"n": "Jaipur", "bn": "গোলাপি শহর — রাজপ্রাসাদ ও দুর্গ", "en": "The Pink City — palaces and forts"}, {"n": "Kerala Backwaters", "bn": "নৌকায় ভাসমান শান্ত জলপথ", "en": "Calm backwaters by houseboat"}, {"n": "Goa", "bn": "সমুদ্র সৈকত আর পর্তুগিজ ঐতিহ্য", "en": "Beaches and Portuguese heritage"}]}, {"code": "NP", "n": {"bn": "নেপাল", "en": "Nepal"}, "places": [{"n": "Everest Base Camp", "bn": "বিশ্বের সর্বোচ্চ শৃঙ্গের পথ", "en": "Trail to the world's highest peak"}, {"n": "Pokhara", "bn": "হ্রদ আর অন্নপূর্ণা পর্বতমালা", "en": "Lakes and the Annapurna range"}, {"n": "Kathmandu", "bn": "প্রাচীন মন্দির আর দরবার স্কয়ার", "en": "Ancient temples and Durbar Square"}, {"n": "Chitwan National Park", "bn": "একশৃঙ্গ গণ্ডার আর জঙ্গল সাফারি", "en": "One-horned rhinos and jungle safari"}]}, {"code": "TH", "n": {"bn": "থাইল্যান্ড", "en": "Thailand"}, "places": [{"n": "Bangkok", "bn": "গ্র্যান্ড প্যালেস আর ভাসমান বাজার", "en": "Grand Palace and floating markets"}, {"n": "Phuket", "bn": "সাদা বালির সৈকত আর দ্বীপ", "en": "White-sand beaches and islands"}, {"n": "Chiang Mai", "bn": "পাহাড়ি শহর, মন্দির আর হাতির অভয়ারণ্য", "en": "Mountain city, temples and elephant sanctuaries"}, {"n": "Krabi", "bn": "চুনাপাথরের পাহাড় আর ফিরোজা জল", "en": "Limestone cliffs and turquoise water"}]}, {"code": "MY", "n": {"bn": "মালয়েশিয়া", "en": "Malaysia"}, "places": [{"n": "Kuala Lumpur", "bn": "পেট্রোনাস টুইন টাওয়ার", "en": "Petronas Twin Towers"}, {"n": "Langkawi", "bn": "সৈকত আর কেবল কার", "en": "Beaches and cable car"}, {"n": "Penang", "bn": "স্ট্রিট ফুড আর ঐতিহ্যবাহী শহর", "en": "Street food and heritage town"}, {"n": "Cameron Highlands", "bn": "চা বাগান আর ঠান্ডা আবহাওয়া", "en": "Tea gardens and cool air"}]}, {"code": "SG", "n": {"bn": "সিঙ্গাপুর", "en": "Singapore"}, "places": [{"n": "Marina Bay Sands", "bn": "আকাশচুম্বী হোটেল আর স্কাইপার্ক", "en": "Iconic hotel and SkyPark"}, {"n": "Gardens by the Bay", "bn": "সুপারট্রি আর ফুলের গম্বুজ", "en": "Supertrees and flower domes"}, {"n": "Sentosa", "bn": "সৈকত আর ইউনিভার্সাল স্টুডিও", "en": "Beaches and Universal Studios"}, {"n": "Chinatown", "bn": "মন্দির, বাজার আর স্ট্রিট ফুড", "en": "Temples, markets and street food"}]}, {"code": "AE", "n": {"bn": "সংযুক্ত আরব আমিরাত", "en": "United Arab Emirates"}, "places": [{"n": "Dubai — Burj Khalifa", "bn": "বিশ্বের সবচেয়ে উঁচু ভবন", "en": "World's tallest building"}, {"n": "Abu Dhabi — Sheikh Zayed Mosque", "bn": "সাদা মার্বেলের বিশাল মসজিদ", "en": "Grand white-marble mosque"}, {"n": "Sharjah", "bn": "জাদুঘর আর সাংস্কৃতিক শহর", "en": "Museums and cultural city"}, {"n": "Desert Safari", "bn": "মরুভূমিতে ডিউন বাশিং আর ক্যাম্প", "en": "Dune bashing and desert camp"}]}, {"code": "TR", "n": {"bn": "তুরস্ক", "en": "Turkey"}, "places": [{"n": "Istanbul", "bn": "হাগিয়া সোফিয়া আর বসফরাস", "en": "Hagia Sophia and the Bosphorus"}, {"n": "Cappadocia", "bn": "গরম বাতাসের বেলুন আর পরী চিমনি", "en": "Hot-air balloons and fairy chimneys"}, {"n": "Pamukkale", "bn": "সাদা ট্রাভার্টাইন টেরেস", "en": "White travertine terraces"}, {"n": "Antalya", "bn": "ভূমধ্যসাগরের সৈকত", "en": "Mediterranean beaches"}]}]};
 const LANGS = DATA.langs, CODES = DATA.codes, NAMES = DATA.names,
-      MONTHS = DATA.months, DIGITS = DATA.digits, UI = DATA.ui;
+      MONTHS = DATA.months, DIGITS = DATA.digits, UI = DATA.ui,
+      TOUR = DATA.tour || [];
 
 let tg = (window.Telegram && Telegram.WebApp) ? Telegram.WebApp : null;
 
@@ -151,6 +231,18 @@ let ratesAt = 0;           // ms epoch of last fetch
 let updatedUtc = "";       // API time_last_update_utc
 let fromCode = "USD", toCode = "BDT";
 let trTo = "en";
+
+// ledger state: one CloudStorage key per month ("ledger_YYYY-MM")
+let ledMonth = "";         // "YYYY-MM"
+let ledEntries = [];       // [{d: day, t: title, a: amount, k: "in"|"out"}]
+// calculator state
+let calcExpr = "";
+let calcSciOn = false;
+// tourism state
+let tourCountry = null;    // index into TOUR, null = country list
+// news state
+let newsTab = "crypto";
+const newsCache = {};
 
 const $ = id => document.getElementById(id);
 
@@ -231,11 +323,9 @@ function render(){
   $("userName").textContent = uname;
   $("userStatus").textContent = t("live");
 
-  // action circles + bottom nav labels
+  // home menu heading + bottom nav labels
+  $("menuHead").textContent = t("menu_head");
   const stripEmoji = s => s.split(" ").slice(1).join(" ");
-  $("lblActRate").textContent = stripEmoji(t("menu_rate"));
-  $("lblActLang").textContent = stripEmoji(t("menu_lang"));
-  $("lblActTr").textContent = stripEmoji(t("menu_tr"));
   $("lblNavHome").textContent = t("nav_home");
   $("lblNavRate").textContent = stripEmoji(t("menu_rate"));
   $("lblNavLang").textContent = stripEmoji(t("menu_lang"));
@@ -268,16 +358,42 @@ function render(){
 
   renderResult();
   renderList();
-  updateHero();
+  renderMenu();
+  renderLedger();
+  renderTour();
+  buildNewsTabs();
 }
 
-function updateHero(){
-  $("heroLabel").textContent = "1 USD = " + curName(toCode);
-  if(!rates || !rates[toCode]){
-    $("heroValue").textContent = t("loading");
-    return;
-  }
-  $("heroValue").textContent = fmt(rates[toCode]) + " " + toCode;
+function renderMenu(){
+  // Home menu: one row per feature (7 total)
+  const items = [
+    {ic: "💵", ti: t("menu_rate"), sub: t("menu_rate_sub"), view: "rate"},
+    {ic: "🔤", ti: t("menu_tr"), sub: t("menu_tr_sub"), view: "tr"},
+    {ic: "🌐", ti: t("menu_lang"), sub: t("menu_lang_sub"), view: "lang"},
+    {ic: "📒", ti: t("menu_ledger"), sub: t("menu_ledger_sub"), view: "ledger"},
+    {ic: "🧮", ti: t("menu_calc"), sub: t("menu_calc_sub"), view: "calc"},
+    {ic: "✈️", ti: t("menu_tour"), sub: t("menu_tour_sub"), view: "tour"},
+    {ic: "📰", ti: t("menu_news"), sub: t("menu_news_sub"), view: "news"},
+  ];
+  const list = $("menuList"); list.innerHTML = "";
+  items.forEach(it => {
+    const row = document.createElement("div");
+    row.className = "menu-row";
+    const ic = document.createElement("span");
+    ic.className = "menu-ic"; ic.textContent = it.ic;
+    const tx = document.createElement("div");
+    tx.className = "menu-tx";
+    const ti = document.createElement("div");
+    ti.className = "menu-ti"; ti.textContent = it.ti;
+    const sub = document.createElement("div");
+    sub.className = "menu-sub"; sub.textContent = it.sub;
+    tx.appendChild(ti); tx.appendChild(sub);
+    const ch = document.createElement("span");
+    ch.className = "chev"; ch.textContent = "›";
+    row.appendChild(ic); row.appendChild(tx); row.appendChild(ch);
+    row.onclick = () => showView(it.view);
+    list.appendChild(row);
+  });
 }
 
 function buildSelects(){
@@ -336,7 +452,7 @@ function renderList(){
     vl.textContent = fmt(rates[code]);
     row.appendChild(nm); row.appendChild(vl);
     row.onclick = () => {
-      toCode = code; buildSelects(); renderResult(); updateHero();
+      toCode = code; buildSelects(); renderResult();
       window.scrollTo({top:0, behavior:"smooth"});
     };
     list.appendChild(row);
@@ -362,14 +478,14 @@ async function fetchRates(force){
       ratesAt = Date.now();
       updatedUtc = data.time_last_update_utc || data.date || "";
       $("err").style.display = "none";
-      renderResult(); renderList(); updateHero();
+      renderResult(); renderList();
       return;
     }catch(e){ lastErr = String(e && e.message || e); }
   }
   const err = $("err");
   err.style.display = "block";
   err.textContent = t("error").replace("{e}", lastErr);
-  $("heroValue").textContent = t("error").replace("{e}", lastErr);
+  $("updated").textContent = t("error").replace("{e}", lastErr);
 }
 
 function buildTrSelect(){
@@ -401,14 +517,326 @@ async function doTranslate(){
   }
 }
 
+// ---- Ledger (হিসাবের খাতা): one Telegram CloudStorage key per month ----
+function csGet(key, cb){
+  if(tg && tg.CloudStorage && tg.CloudStorage.getItem){
+    try{ tg.CloudStorage.getItem(key, function(err, val){ cb(val || ""); }); }
+    catch(e){ cb(""); }
+  } else {
+    try{ cb(localStorage.getItem(key) || ""); }catch(e){ cb(""); }
+  }
+}
+function csSet(key, val, cb){
+  if(tg && tg.CloudStorage && tg.CloudStorage.setItem){
+    try{ tg.CloudStorage.setItem(key, val, function(err){ if(cb) cb(!err); }); }
+    catch(e){ if(cb) cb(false); }
+  } else {
+    try{ localStorage.setItem(key, val); if(cb) cb(true); }catch(e){ if(cb) cb(false); }
+  }
+}
+function ledMonthLabel(){
+  const parts = ledMonth.split("-");
+  const y = parseInt(parts[0], 10), m = parseInt(parts[1], 10);
+  const months = MONTHS[lang] || MONTHS.bn;
+  return (months[m - 1] || m) + " " + locDigits(y);
+}
+function ledShift(dir){
+  const parts = ledMonth.split("-");
+  let y = parseInt(parts[0], 10), m = parseInt(parts[1], 10) + dir;
+  if(m < 1){ m = 12; y -= 1; }
+  if(m > 12){ m = 1; y += 1; }
+  ledMonth = y + "-" + String(m).padStart(2, "0");
+  ledLoad();
+}
+function ledLoad(){
+  csGet("ledger_" + ledMonth, function(val){
+    try{ ledEntries = val ? JSON.parse(val) : []; }
+    catch(e){ ledEntries = []; }
+    if(!Array.isArray(ledEntries)) ledEntries = [];
+    renderLedger();
+  });
+}
+function ledSave(){
+  const val = JSON.stringify(ledEntries);
+  if(val.length > 4000){
+    $("ledErr").style.display = "block";
+    $("ledErr").textContent = t("ledger_toolong");
+    return;
+  }
+  $("ledErr").style.display = "none";
+  csSet("ledger_" + ledMonth, val, function(){});
+}
+function renderLedger(){
+  $("ledMonth").textContent = ledMonthLabel();
+  $("lblLedIn").textContent = t("ledger_in");
+  $("lblLedOut").textContent = t("ledger_out");
+  $("lblLedBal").textContent = t("ledger_bal");
+  $("lblLedWhat").textContent = t("ledger_what");
+  $("lblLedAmt").textContent = t("amount");
+  $("ledAdd").textContent = t("ledger_add");
+  $("ledListHead").textContent = ledMonthLabel();
+  const type = $("ledType");
+  if(!type.options.length){
+    [["in", t("ledger_in")], ["out", t("ledger_out")]].forEach(([v, l]) => {
+      const o = document.createElement("option");
+      o.value = v; o.textContent = l; type.appendChild(o);
+    });
+  }
+  let tin = 0, tout = 0;
+  ledEntries.forEach(e => { if(e.k === "in") tin += e.a; else tout += e.a; });
+  $("ledIn").textContent = fmt(tin);
+  $("ledOut").textContent = fmt(tout);
+  $("ledBal").textContent = fmt(tin - tout);
+  const list = $("ledList"); list.innerHTML = "";
+  if(!ledEntries.length){
+    const d = document.createElement("div");
+    d.className = "hint"; d.textContent = t("ledger_empty");
+    list.appendChild(d);
+    return;
+  }
+  ledEntries.forEach((e, i) => {
+    const row = document.createElement("div");
+    row.className = "led-row";
+    const left = document.createElement("div");
+    const ti = document.createElement("div");
+    ti.className = "led-t"; ti.textContent = e.t;
+    const dd = document.createElement("div");
+    dd.className = "led-d"; dd.textContent = locDigits(e.d);
+    left.appendChild(ti); left.appendChild(dd);
+    const amt = document.createElement("span");
+    amt.className = "led-a " + (e.k === "in" ? "in" : "out");
+    amt.textContent = (e.k === "in" ? "+" : "−") + fmt(e.a);
+    const del = document.createElement("button");
+    del.className = "led-del"; del.textContent = t("ledger_del");
+    del.onclick = () => { ledEntries.splice(i, 1); ledSave(); renderLedger(); };
+    row.appendChild(left); row.appendChild(amt); row.appendChild(del);
+    list.appendChild(row);
+  });
+}
+function ledAddEntry(){
+  const what = $("ledWhat").value.trim();
+  const amt = parseFloat($("ledAmt").value);
+  if(!what || isNaN(amt) || amt <= 0) return;
+  ledEntries.unshift({d: new Date().getDate(), t: what.slice(0, 40), a: amt, k: $("ledType").value});
+  ledSave();
+  $("ledWhat").value = ""; $("ledAmt").value = "";
+  renderLedger();
+}
+
+// ---- Calculator (normal + scientific) ----
+function fact(n){
+  n = Math.floor(n);
+  if(n < 0 || n > 170) throw new Error("fact");
+  let r = 1;
+  for(let i = 2; i <= n; i++) r *= i;
+  return r;
+}
+function calcEval(expr){
+  let e = expr.replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-")
+              .replace(/%/g, "/100").replace(/π/g, "Math.PI")
+              .replace(/√\(/g, "Math.sqrt(").replace(/√/g, "Math.sqrt")
+              .replace(/sin\(/g, "Math.sin(").replace(/cos\(/g, "Math.cos(")
+              .replace(/tan\(/g, "Math.tan(").replace(/log\(/g, "Math.log10(")
+              .replace(/ln\(/g, "Math.log(").replace(/\^/g, "**")
+              .replace(/(\d+)!/g, "fact($1)")
+              .replace(/e/g, "Math.E");
+  const check = e.replace(/Math\.(PI|E|sqrt|sin|cos|tan|log10|log)/g, "").replace(/fact/g, "");
+  if(!/^[0-9+\-*/().\s]*$/.test(check)) throw new Error("bad");
+  const v = Function('"use strict"; return (' + e + ')')();
+  if(typeof v !== "number" || !isFinite(v)) throw new Error("bad");
+  return v;
+}
+function calcShow(){
+  $("calcExpr").textContent = calcExpr || " ";
+  let res = "=";
+  if(calcExpr){
+    try{ res = "= " + fmt(calcEval(calcExpr)); }
+    catch(e){ res = "= " + t("calc_err"); }
+  }
+  $("calcRes").textContent = res;
+}
+function calcPress(key){
+  if(key === "C"){ calcExpr = ""; }
+  else if(key === "⌫"){ calcExpr = calcExpr.slice(0, -1); }
+  else if(key === "="){
+    try{ calcExpr = String(calcEval(calcExpr)); }catch(e){ calcExpr = ""; }
+  }
+  else if(key === "±"){ calcExpr = calcExpr.startsWith("−") ? calcExpr.slice(1) : "−" + calcExpr; }
+  else if(key === "x²"){ calcExpr += "^2"; }
+  else if(key === "x^y"){ calcExpr += "^"; }
+  else if(key === "1/x"){ if(calcExpr) calcExpr = "1/(" + calcExpr + ")"; }
+  else if(key === "√"){ calcExpr += "√("; }
+  else if(key === "sin" || key === "cos" || key === "tan" || key === "log" || key === "ln"){ calcExpr += key + "("; }
+  else { calcExpr += key; }
+  calcShow();
+}
+function buildCalc(){
+  const main = ["C", "⌫", "%", "÷", "7", "8", "9", "×", "4", "5", "6", "−", "1", "2", "3", "+", "±", "0", ".", "="];
+  const sci = ["sin", "cos", "tan", "log", "ln", "√", "x²", "x^y", "π", "e", "(", ")", "!", "1/x"];
+  const mk = (grid, keys) => {
+    grid.innerHTML = "";
+    keys.forEach(k => {
+      const b = document.createElement("button");
+      b.className = "calc-btn" + (["÷", "×", "−", "+", "%"].includes(k) ? " op" : "") + (k === "=" ? " eq" : "");
+      b.textContent = k;
+      b.onclick = () => calcPress(k);
+      grid.appendChild(b);
+    });
+  };
+  mk($("calcMain"), main);
+  mk($("calcSci"), sci);
+  $("calcSciBtn").textContent = "ƒx " + t("calc_sci");
+  calcShow();
+}
+
+// ---- Tourism (static content) ----
+function tourName(c){ return (c.n && c.n[lang]) || (c.n && c.n.bn) || c.n.en || c.code; }
+function tourDesc(p){ return (p && p[lang]) || (p && p.bn) || p.en || ""; }
+function renderTour(){
+  const list = $("tourList"); list.innerHTML = "";
+  if(tourCountry === null){
+    TOUR.forEach((c, i) => {
+      const row = document.createElement("div");
+      row.className = "tour-row";
+      const tx = document.createElement("div");
+      const nm = document.createElement("div");
+      nm.className = "tour-nm"; nm.textContent = tourName(c);
+      const sub = document.createElement("div");
+      sub.className = "tour-sub";
+      sub.textContent = locDigits(c.places.length) + " " + t("tour_places");
+      tx.appendChild(nm); tx.appendChild(sub);
+      const ch = document.createElement("span");
+      ch.className = "chev"; ch.textContent = "›";
+      row.appendChild(tx); row.appendChild(ch);
+      row.onclick = () => { tourCountry = i; renderTour(); };
+      list.appendChild(row);
+    });
+    return;
+  }
+  const c = TOUR[tourCountry];
+  c.places.forEach(p => {
+    const d = document.createElement("div");
+    d.className = "tour-place";
+    const pn = document.createElement("div");
+    pn.className = "tour-pn"; pn.textContent = p.n;
+    const pd = document.createElement("div");
+    pd.className = "tour-pd"; pd.textContent = tourDesc(p);
+    d.appendChild(pn); d.appendChild(pd);
+    list.appendChild(d);
+  });
+}
+
+// ---- News feed ----
+const NEWS_SRC = {
+  crypto: [
+    {type: "api", url: "https://cryptocurrency.cv/api/news?limit=10"},
+    {type: "rss", url: "https://www.coindesk.com/arc/outboundfeeds/rss/"}
+  ],
+  world: [
+    {type: "rss", url: "http://feeds.bbci.co.uk/news/world/rss.xml"}
+  ],
+  travel: [
+    {type: "rss", url: "https://news.google.com/rss/search?q=tourism&hl=en&gl=US&ceid=US:en"}
+  ],
+  social: [
+    {type: "rss", url: "https://news.google.com/rss/search?q=social%20media&hl=en&gl=US&ceid=US:en"}
+  ]
+};
+function parseApiNews(data){
+  const arr = Array.isArray(data) ? data : (data.data || data.news || data.items || data.articles || []);
+  if(!Array.isArray(arr)) return [];
+  return arr.map(it => ({
+    title: it.title || it.headline || "",
+    link: it.url || it.link || "",
+    src: (it.source && (it.source.name || it.source)) || it.publisher || "",
+    date: it.published_at || it.pubDate || it.date || it.timestamp || ""
+  })).filter(x => x.title);
+}
+async function fetchRss(url){
+  const r = await fetch("https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(url));
+  const j = await r.json();
+  if(j.status !== "ok" || !Array.isArray(j.items)) throw new Error("rss");
+  return j.items.map(it => ({
+    title: (it.title || "").replace(/<[^>]*>/g, ""),
+    link: it.link || "",
+    src: it.author || "",
+    date: it.pubDate || ""
+  })).filter(x => x.title);
+}
+function buildNewsTabs(){
+  const tabs = $("newsTabs"); tabs.innerHTML = "";
+  [["crypto", t("tab_crypto")], ["world", t("tab_world")], ["travel", t("tab_travel")], ["social", t("tab_social")]].forEach(([k, l]) => {
+    const b = document.createElement("button");
+    b.className = "tab" + (k === newsTab ? " on" : "");
+    b.textContent = l;
+    b.onclick = () => loadNews(k);
+    tabs.appendChild(b);
+  });
+}
+async function loadNews(tab){
+  newsTab = tab;
+  buildNewsTabs();
+  const list = $("newsList");
+  if(newsCache[tab]){ renderNews(newsCache[tab]); return; }
+  list.innerHTML = "";
+  const d = document.createElement("div");
+  d.className = "hint"; d.textContent = t("loading");
+  list.appendChild(d);
+  let items = [];
+  for(const src of NEWS_SRC[tab]){
+    try{
+      if(src.type === "api"){
+        const r = await fetch(src.url, {headers: {"Accept": "application/json"}});
+        items = parseApiNews(await r.json());
+      } else {
+        items = await fetchRss(src.url);
+      }
+      if(items.length) break;
+    }catch(e){ items = []; }
+  }
+  items = items.slice(0, 10);
+  newsCache[tab] = items;
+  renderNews(items);
+}
+function renderNews(items){
+  const list = $("newsList"); list.innerHTML = "";
+  if(!items.length){
+    const d = document.createElement("div");
+    d.className = "hint"; d.textContent = t("news_error");
+    list.appendChild(d);
+    return;
+  }
+  items.forEach(it => {
+    const a = document.createElement("a");
+    a.className = "news-item";
+    a.href = it.link || "#";
+    a.target = "_blank";
+    const ti = document.createElement("div");
+    ti.className = "news-ti"; ti.textContent = it.title;
+    const meta = document.createElement("div");
+    meta.className = "news-meta";
+    let m = it.src || "";
+    if(it.date){
+      const dd = new Date(it.date);
+      if(!isNaN(dd)) m += (m ? " • " : "") + formatDhaka(dd.toISOString()).split(",")[0];
+    }
+    meta.textContent = m;
+    a.appendChild(ti); a.appendChild(meta);
+    list.appendChild(a);
+  });
+}
+
 function showView(v){
-  ["home", "rate", "lang", "tr"].forEach(name => {
+  ["home", "rate", "lang", "tr", "ledger", "calc", "tour", "news"].forEach(name => {
     $("view-" + name).style.display = (name === v) ? "block" : "none";
   });
   const navMap = {home: "navHome", rate: "navRate", lang: "navLang", tr: "navTr"};
   ["navHome", "navRate", "navLang", "navTr"].forEach(id => {
     $(id).classList.toggle("on", id === navMap[v]);
   });
+  if(v === "ledger") ledLoad();
+  if(v === "tour") renderTour();
+  if(v === "news") loadNews(newsTab);
   window.scrollTo(0, 0);
 }
 
@@ -446,6 +874,9 @@ function init(){
     waitForTelegram(20);
   }
   buildSelects();
+  const now = new Date();
+  ledMonth = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
+  buildCalc();
   $("amount").addEventListener("input", renderResult);
   $("fromSel").addEventListener("change", e => { fromCode = e.target.value; renderResult(); });
   $("toSel").addEventListener("change", e => { toCode = e.target.value; renderResult(); });
@@ -454,9 +885,6 @@ function init(){
     buildSelects(); renderResult();
   });
   $("refresh").addEventListener("click", () => fetchRates(true));
-  $("actRate").addEventListener("click", () => showView("rate"));
-  $("actLang").addEventListener("click", () => showView("lang"));
-  $("actTr").addEventListener("click", () => showView("tr"));
   $("navHome").addEventListener("click", () => showView("home"));
   $("navRate").addEventListener("click", () => showView("rate"));
   $("navLang").addEventListener("click", () => showView("lang"));
@@ -464,6 +892,20 @@ function init(){
   $("backRate").addEventListener("click", () => showView("home"));
   $("backLang").addEventListener("click", () => showView("home"));
   $("backTr").addEventListener("click", () => showView("home"));
+  $("backLedger").addEventListener("click", () => showView("home"));
+  $("backCalc").addEventListener("click", () => showView("home"));
+  $("backNews").addEventListener("click", () => showView("home"));
+  $("backTour").addEventListener("click", () => {
+    if(tourCountry !== null){ tourCountry = null; renderTour(); }
+    else showView("home");
+  });
+  $("ledPrev").addEventListener("click", () => ledShift(-1));
+  $("ledNext").addEventListener("click", () => ledShift(1));
+  $("ledAdd").addEventListener("click", ledAddEntry);
+  $("calcSciBtn").addEventListener("click", () => {
+    calcSciOn = !calcSciOn;
+    $("calcSci").style.display = calcSciOn ? "grid" : "none";
+  });
   $("trButton").addEventListener("click", doTranslate);
   $("trToSel").addEventListener("change", e => { trTo = e.target.value; });
   trTo = (lang === "en") ? "bn" : "en";
