@@ -1,0 +1,28 @@
+name: p2p-rates
+
+# Refresh p2p.json (Binance P2P USDT/BDT rates for the Mini App) every 5 min.
+# The Mini App cannot call Binance P2P directly (no CORS headers), so this
+# workflow fetches the rates server-side and commits them as a static file
+# the app reads from the same origin.
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch Binance P2P rates
+        run: python3 scripts/fetch_p2p.py
+      - name: Commit if changed
+        run: |
+          git config user.name "p2p-rates-bot"
+          git config user.email "p2p-rates-bot@users.noreply.github.com"
+          git add p2p.json
+          git diff --cached --quiet || git commit -m "Update P2P rates"
+          git push
