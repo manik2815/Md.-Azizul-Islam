@@ -577,6 +577,18 @@ function buildP2PChips(){
     chips.appendChild(b);
   });
 }
+function p2pSnapToRange(){
+  // With a taka range selected, if no ad fits the current amount, jump the
+  // amount to the smallest tradeable amount of the best-priced ad that
+  // overlaps the range (so the result line never says "no ad" while the
+  // list below shows matching ads).
+  if(!p2pRange || !p2pData) return;
+  const ads = p2pData[p2pSide] || [];
+  const amount = parseFloat($("p2pAmount").value) || 0;
+  if(p2pBestAd(ads, amount)) return;
+  const ov = ads.find(a => a.max >= p2pRange[0] && a.min <= p2pRange[1]);
+  if(ov) $("p2pAmount").value = Number((ov.min / ov.p).toFixed(2));
+}
 function buildP2PRangeChips(){
   const chips = $("p2pRangeChips"); chips.innerHTML = "";
   P2P_RANGES.forEach(([lo, hi]) => {
@@ -592,8 +604,9 @@ function buildP2PRangeChips(){
         const ads = (p2pData && p2pData[p2pSide]) || [];
         const ref = ads.length ? ads[0].p : 0;
         if(ref) $("p2pAmount").value = Number((lo / ref).toFixed(2));
+        p2pSnapToRange();
       }
-      renderP2P();
+      render();
     };
     chips.appendChild(b);
   });
@@ -1069,8 +1082,8 @@ function init(){
     $("calcSci").style.display = calcSciOn ? "grid" : "none";
   });
   $("trButton").addEventListener("click", doTranslate);
-  $("p2pBuy").addEventListener("click", () => { p2pSide = "buy"; renderP2P(); });
-  $("p2pSell").addEventListener("click", () => { p2pSide = "sell"; renderP2P(); });
+  $("p2pBuy").addEventListener("click", () => { p2pSide = "buy"; p2pSnapToRange(); renderP2P(); });
+  $("p2pSell").addEventListener("click", () => { p2pSide = "sell"; p2pSnapToRange(); renderP2P(); });
   $("p2pAmount").addEventListener("input", () => { p2pRange = null; renderP2P(); });
   $("p2pRefresh").addEventListener("click", () => loadP2P(true));
   $("backP2P").addEventListener("click", () => showView("home"));
